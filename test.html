@@ -1,135 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-tw">
 <head>
+    <title>Echarts</title>
     <meta charset="utf-8">
-    <title>ECharts</title>
-  
-    <script src="echarts.min.js"></script>
-    <script src="jquery.min.js"></script>
+    <style src="echarts.min.js"></style>
+    <style src="jquery.min.js"></style>
 </head>
 <body>
-   <section style="width: 1200;height: 800;">
-    <div ></div>
-    <div id="device1-a" style="width: 600px;height:400px;"></div>
-    <div id="device1-b" style="width: 600px;height:400px;"></div>
-    <div id="device1-c" style="width: 600px;height:400px;"></div>
-    <div id="device1-d" style="width: 600px;height:400px;"></div>
-   </section>
-    
-
+    <div id="test" style="width: 600px; height: 400px;"></div>
     <script type="text/javascript">
+     var test=echarts.init(document.getElementById("test"));
+          test.setOption({
+             title:{
+                 text:'pm2.5data'
+             },
+             tooltip:{},
+             legend:{
+                 data:[]
+             },
+             xAxis:{
+                 data:[]
+             },
+             yAxis:{},
+             series:[{
+                 name:'ug/m3',
+                 type:'line',
+                 data:[]
+             }]
+         })
+         $.get($.getJSON("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8")).done(function(data){
+             test.setOption({
+                 legend:{
+                     data:data.channel.field1
+                 },
+                 xAxis:{
+                     data:data.feeds[feeds.lenght]
+                 }
+             })
 
-        var device1a = echarts.init(document.getElementById('device1-a'));
-        var device1b = echarts.init(document.getElementById('device1-b'));
-        var device1c = echarts.init(document.getElementById('device1-c'));
-        var device1d = echarts.init(document.getElementById('device1-d'));
+     })
 
-
-        var device1a_option = {
-            title: {
-                text: 'device1-pm2.5'
-            },
-            tooltip: {},
-            legend: {
-                data:['pm2.5(ug/m3)']
-            },
-            xAxis: {
-              name:'time',
-              data:[]
-            },
-            yAxis:{
-              name:'ug/m3',
-              
-              
-            }, 
-            series: [{
-                name: 'pm2.5',
-                type: 'line',
-                data: []
-            }],
-        };
-
-
-        var device1b_option = {
-            title: {
-                text: 'device1-pm10'
-            },
-            tooltip: {},
-            legend: {
-                data:['pm10(ug/m3)']
-            },
-            xAxis: {
-              data:[]
-            },
-            yAxis:{
-              name:'ug/m3',
-            }, 
-            series: [{
-                name: 'pm10',
-                type: 'line',
-                data: []
-            }],
-        };
-
-
-        var device1c_option = {
-            title: {
-                text: 'device1-temperature'
-            },
-            tooltip: {},
-            legend: {
-                data:['temperture']
-            },
-            xAxis: {
-              data:[]
-            },
-            yAxis:{
-              name:'°C', 
-            }, 
-            series: [{
-                name: 'temp',
-                type: 'line',
-                data: []
-            }],
-        };
-
-
-        var device1d_option = {
-            title: {
-                text: 'device1-humidity'
-            },
-            tooltip: {},
-            legend: {
-                data:['humidity(%RF)']
-            },
-            xAxis: {
-              name:'time',
-              data:[]
-            },
-            yAxis:{
-              name:'%RF',
-            }, 
-            series: [{
-                name: 'hum',
-                type: 'line',
-                data: []
-            }],
-        };
-
-        $.getJSON('http://api.thingspeak.com/channels/1008690/feeds/last.json?key=AIU2U4E7PGCJQ4S8').done(function(data){
-            device1a.setOption({
-                xAxis:{
-                    data:data.created.at
-                },
-                series:[{
-                    name:'pm2.5',
-                    data:data.field1
-                }]
-            });
-        });
-        device1b.setOption(device1b_option);
-        device1c.setOption(device1c_option);
-        device1d.setOption(device1d_option);
     </script>
 </body>
 </html>
