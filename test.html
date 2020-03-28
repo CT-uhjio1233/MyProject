@@ -3,133 +3,45 @@
 <head>
     <meta charset="utf-8">
     <title>ECharts</title>
-  
     <script src="echarts.min.js"></script>
     <script src="jquery.min.js"></script>
 </head>
 <body>
-   <section style="width: 1200;height: 800;">
-    <div ></div>
-    <div id="device1-a" style="width: 600px;height:400px;"></div>
-    <div id="device1-b" style="width: 600px;height:400px;"></div>
-    <div id="device1-c" style="width: 600px;height:400px;"></div>
-    <div id="device1-d" style="width: 600px;height:400px;"></div>
-   </section>
-    
+    <div id="test"  style="width: 600px;height:400px;"></div>
 
     <script type="text/javascript">
-
-        var device1a = echarts.init(document.getElementById('device1-a'));
-        var device1b = echarts.init(document.getElementById('device1-b'));
-        var device1c = echarts.init(document.getElementById('device1-c'));
-        var device1d = echarts.init(document.getElementById('device1-d'));
-
-
-        var device1a_option = {
-            title: {
-                text: 'device1-pm2.5'
-            },
-            tooltip: {},
-            legend: {
-                data:['pm2.5(ug/m3)']
-            },
-            xAxis: {
-              name:'time',
-              data:[]
-            },
-            yAxis:{
-              name:'ug/m3',
-              
-              
-            }, 
-            series: [{
-                name: 'pm2.5',
-                type: 'line',
-                data: []
-            }],
-        };
-
-
-        var device1b_option = {
-            title: {
-                text: 'device1-pm10'
-            },
-            tooltip: {},
-            legend: {
-                data:['pm10(ug/m3)']
-            },
-            xAxis: {
-              data:[]
-            },
-            yAxis:{
-              name:'ug/m3',
-            }, 
-            series: [{
-                name: 'pm10',
-                type: 'line',
-                data: []
-            }],
-        };
-
-
-        var device1c_option = {
-            title: {
-                text: 'device1-temperature'
-            },
-            tooltip: {},
-            legend: {
-                data:['temperture']
-            },
-            xAxis: {
-              data:[]
-            },
-            yAxis:{
-              name:'°C', 
-            }, 
-            series: [{
-                name: 'temp',
-                type: 'line',
-                data: []
-            }],
-        };
-
-
-        var device1d_option = {
-            title: {
-                text: 'device1-humidity'
-            },
-            tooltip: {},
-            legend: {
-                data:['humidity(%RF)']
-            },
-            xAxis: {
-              name:'time',
-              data:[]
-            },
-            yAxis:{
-              name:'%RF',
-            }, 
-            series: [{
-                name: 'hum',
-                type: 'line',
-                data: []
-            }],
-        };
-
-        $.getJSON('http://api.thingspeak.com/channels/1008690/feeds/last.json?key=AIU2U4E7PGCJQ4S8').done(function(data){
-            device1a.setOption({
-                xAxis:{
-                    data:data.created.at
-                },
-                series:[{
-                    name:'pm2.5',
-                    data:data.field1
-                }]
-            });
+    var pm2=echarts.init(document.getElementById('test'));
+    pm2.showLoading();
+    $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
+        pm2.hideLoading();    
+        data.push(value);
+        var timepm21=data.feeds[99].created_at;
+        var timepm22=data.feeds[98].created_at;
+        var timepm23=data.feeds[97].created_at;
+        var timepm24=data.feeds[96].created_at;
+        var timepm25=data.feeds[95].created_at;
+        pm2.setOption({ 
+        title: {
+        text: timepm21.substring(0,10)+'-pm2.5'
+        },
+        tooltip: {},
+        legend: {
+            data:['销量']
+        },
+        xAxis: {
+            data: [timepm25.substring(11,19),timepm24.substring(11,19),timepm23.substring(11,19),timepm22.substring(11,19),timepm21.substring(11,19)]
+        },
+        yAxis: {},
+        series: [{
+            name: 'pm2.5:ug/m3',
+            type: 'line',
+            data: [data.feeds[95].field1,data.feeds[96].field1,data.feeds[97].field1,data.feeds[98].field1,data.feeds[99].field1]
+        }]
         });
-        device1b.setOption(device1b_option);
-        device1c.setOption(device1c_option);
-        device1d.setOption(device1d_option);
+    });
+    
+        
+        
     </script>
 </body>
 </html>
