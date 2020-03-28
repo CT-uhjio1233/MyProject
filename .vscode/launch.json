@@ -1,0 +1,29 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-drink3a817013<vscode place_5b2eea49>",
+            "request": "launch",
+            "mainClass": "drink3a817013",
+            "projectName": "vscode place_5b2eea49"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-extend3a817013<vscode place_5b2eea49>",
+            "request": "launch",
+            "mainClass": "extend3a817013",
+            "projectName": "vscode place_5b2eea49"
+        }
+    ]
+}

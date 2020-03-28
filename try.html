@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <script src="echarts.min.js"></script>
+    <script src="jquery.min.js"></script>
+</head>
+<body>
+    <div id="dev1pm2"  style="width: 600px;height:400px;"></div>
+
+    <script type="text/javascript">
+    var pm2=echarts.init(document.getElementById('dev1pm2'));
+    pm2.showLoading();
+    $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
+        pm2.hideLoading();
+        var date=data.feeds[99].created_at.substring(0,10);
+        var time1=[];
+        var feed=[];
+        var j=95;
+
+        for(var i=0;i<=4;i++){
+            time1.push((data.feeds[j].created_at).substring(11,19));
+            feed.push(data.feeds[j].field1);
+            j++;
+        }
+
+       
+
+        pm2.setOption({ 
+        title: {
+        text: date+'-pm2.5'
+        },
+        tooltip: {},
+        legend: {
+            data:['pm2.5']
+        },
+        xAxis: {
+            data: [time1[0],time1[1],time1[2],time1[3],time1[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: 'pm2.5:ug/m3',
+            type: 'line',
+            data: [feed[0],feed[1],feed[2],feed[3],feed[4]]
+        }]
+        });
+        setInterval(function(){
+        $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
+            function addData(shift){
+            date=data.feeds[99].created_at.substring(0,10);
+            time1.push((data.feeds[99].created_at).substring(11,19));
+            feed.push(data.feeds[99].field1);
+            if(shift){
+                time1.shift();
+                feed.shift();
+            }
+        }
+
+        if(time1[4]!=((data.feeds[99].created_at).substring(11,19))){
+                addData(true);
+        }
+        pm2.setOption({
+        xAxis: {
+            data: [time1[0],time1[1],time1[2],time1[3],time1[4]]
+        },
+        series: [{
+            name: 'pm2.5:ug/m3',
+            data: [feed[0],feed[1],feed[2],feed[3],feed[4]]
+        }]
+        });
+        }); 
+        },10000)
+    });
+    
+    </script>
+</body>
+</html>
