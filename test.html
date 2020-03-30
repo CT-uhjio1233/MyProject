@@ -3,42 +3,40 @@
 <head>
     <title>Echarts</title>
     <meta charset="utf-8">
-    <style src="echarts.min.js"></style>
-    <style src="jquery.min.js"></style>
+    <script src="echarts.min.js"></script>
+    <script src="jquery.min.js"></script>
 </head>
 <body>
-    <div id="test" style="width: 600px; height: 400px;"></div>
+    <div id="pm2.5-1" style="width: 800px; height: 400px;"></div>
+    <div id="pm10-1" style="width: 800px; height: 400px;"></div>
+    <div id="temperture" style="width: 800px; height: 400px;"></div>
+    <div id="test" style="width: 800px; height: 400px;"></div>
     <script type="text/javascript">
-     var test=echarts.init(document.getElementById("test"));
-          test.setOption({
+     var pm2po5of1=echarts.init(document.getElementById("pm2.5-1"));
+     $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
+          pm2po5of1.setOption({
              title:{
                  text:'pm2.5data'
              },
              tooltip:{},
              legend:{
-                 data:[]
+                 data:[data.channel.field1]
              },
              xAxis:{
-                 data:[]
+                 name:'date',
+                 data:[data.feeds[95].created_at,data.feeds[96].created_at,data.feeds[97].created_at,data.feeds[98].created_at,data.feeds[99].created_at]
              },
-             yAxis:{},
+             yAxis:{
+                 name:'ug/m3'
+             },
              series:[{
-                 name:'ug/m3',
+                 name:'pm2.5',
                  type:'line',
-                 data:[]
+                 data:[data.feeds[95].field1,data.feeds[96].field1,data.feeds[97].field1,data.feeds[98].field1,data.feeds[99].field1]
              }]
-         })
-         $.get($.getJSON("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8")).done(function(data){
-             test.setOption({
-                 legend:{
-                     data:data.channel.field1
-                 },
-                 xAxis:{
-                     data:data.feeds[feeds.lenght]
-                 }
-             })
-
-     })
+         });
+        });
+         
 
     </script>
 </body>
