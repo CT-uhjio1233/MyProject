@@ -3,41 +3,943 @@
 <head>
     <title>Echarts</title>
     <meta charset="utf-8">
+    <title>ECharts</title>
     <script src="echarts.min.js"></script>
     <script src="jquery.min.js"></script>
-</head>
-<body>
-    <div id="pm2.5-1" style="width: 800px; height: 400px;"></div>
-    <div id="pm10-1" style="width: 800px; height: 400px;"></div>
-    <div id="temperture" style="width: 800px; height: 400px;"></div>
-    <div id="test" style="width: 800px; height: 400px;"></div>
-    <script type="text/javascript">
-     var pm2po5of1=echarts.init(document.getElementById("pm2.5-1"));
-     $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
-          pm2po5of1.setOption({
-             title:{
-                 text:'pm2.5data'
-             },
-             tooltip:{},
-             legend:{
-                 data:[data.channel.field1]
-             },
-             xAxis:{
-                 name:'date',
-                 data:[data.feeds[95].created_at,data.feeds[96].created_at,data.feeds[97].created_at,data.feeds[98].created_at,data.feeds[99].created_at]
-             },
-             yAxis:{
-                 name:'ug/m3'
-             },
-             series:[{
-                 name:'pm2.5',
-                 type:'line',
-                 data:[data.feeds[95].field1,data.feeds[96].field1,data.feeds[97].field1,data.feeds[98].field1,data.feeds[99].field1]
-             }]
-         });
-        });
-         
+    <style>
+        *{
+            margin: 0px;
+            font-size: 20px;
+        }
+        #set{
 
+        }
+        #header{
+            color: white;
+            padding-top: 50px;
+            font-size: 42px;
+            background-color: green;
+            width: 1440px;
+            height: 120px;
+        }
+        #wrap{
+            float: left;
+            width: 100%;
+        }  
+        #main{
+            margin-left:240px;
+            width: 1200px;
+            height: 850px;
+        }
+        #side{
+            float: left;
+            margin-left: -100%;
+            width: 240px;
+            height: 850;
+        }
+        #timedevice{
+            text-align: center;
+            font-size: 30px;
+            width: 300px;
+            height: 40px;
+            color: white;
+            background-color: green;
+        }
+        #float{
+            background-color: greenyellow;
+            clear: both;
+            width: 1440x;
+            height: 80px;
+        }
+        #dev_pm2{
+            margin: 25px 0 0 35px;
+            float: left;
+            width: 550px;
+            height: 350px;
+            border: 5px green solid;
+        }
+        #dev_pm10{
+            margin: 25px 0 0 30px;
+            float: left;
+            width: 550px;
+            height: 350px;
+            border: 5px green solid;
+        }
+        #dev_temp{
+            margin:25px 0 0 35px;
+            clear: both;
+            float: left;
+            width: 550px;
+            height: 350px;
+            border: 5px green solid;
+        }
+        #dev_hum{
+            margin:25px 0 0 30px;
+            float: left;
+            width: 550px;
+            height: 350px;
+            border: 5px green solid;
+        }
+    </style>
+</head>
+
+<body>
+   <div id="set">
+       <div id="header">校園環境建置計畫</div>
+       <div id="wrap">
+           <div id="main">
+           <p id="timedevice"></p>
+           <div id="dev_pm2"></div>
+           <div id="dev_pm10"></div>
+           <div id="dev_temp"></div>
+           <div id="dev_hum"></div>
+           </div>
+       </div> 
+       <div id="side">
+           <div id="devicechange"></div>
+           <div id="lastupdata"></div>
+           <div id="jsompackage"></div>
+       </div>
+       <div id="float"></div>
+   </div>
+
+    <script type="text/javascript">
+    window.onload=device1;
+
+    var dev_pm2=echarts.init(document.getElementById('dev_pm2'));
+    var dev_pm10=echarts.init(document.getElementById('dev_pm10'));
+    var dev_temp=echarts.init(document.getElementById('dev_temp'));
+    var dev_hum=echarts.init(document.getElementById('dev_hum'));
+
+   function device1(){
+    dev_pm2.showLoading();
+    $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
+        dev_pm2.hideLoading();
+        var date=data.feeds[99].created_at.substring(0,10);
+        var time_dev1=[];
+        var feed_dev1_1=[];//dev1_1=device1 pm2.5,dev1_2=device1 pm10,dev1_3 device1 tempurate dev1_4 device1 humidity...
+        var feed_dev1_2=[];
+        var feed_dev1_3=[];
+        var feed_dev1_4=[];
+
+
+   
+        for(var i=95;i<=99;i++){
+            time_dev1.push((data.feeds[i].created_at).substring(11,19));
+            feed_dev1_1.push(data.feeds[i].field1);
+            feed_dev1_2.push(data.feeds[i].field2);
+            feed_dev1_3.push(data.feeds[i].field3);
+            feed_dev1_4.push(data.feeds[i].field4);
+        }
+
+        dev_pm2.setOption({ 
+        title: {
+        text: 'PM2.5'
+        },
+        tooltip: {},
+        legend: {
+            data:['ug/m3']
+        },
+        xAxis: {
+            data: [time_dev1[0],time_dev1[1],time_dev1[2],time_dev1[3],time_dev1[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: 'ug/m3',
+            type: 'line',
+            data: [feed_dev1_1[0],feed_dev1_1[1],feed_dev1_1[2],feed_dev1_1[3],feed_dev1_1[4]]
+        }]
+        });
+
+        dev_pm10.setOption({ 
+        title: {
+        text: 'PM10'
+        },
+        tooltip: {},
+        legend: {
+            data:['ug/m3']
+        },
+        xAxis: {
+            data: [time_dev1[0],time_dev1[1],time_dev1[2],time_dev1[3],time_dev1[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: 'ug/m3',
+            type: 'line',
+            data: [feed_dev1_2[0],feed_dev1_2[1],feed_dev1_2[2],feed_dev1_2[3],feed_dev1_2[4]]
+        }]
+        });
+
+        dev_temp.setOption({ 
+        title: {
+        text: 'Temperature'
+        },
+        tooltip: {},
+        legend: {
+            data:['°C']
+        },
+        xAxis: {
+            data: [time_dev1[0],time_dev1[1],time_dev1[2],time_dev1[3],time_dev1[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: '°C',
+            type: 'line',
+            data: [feed_dev1_3[0],feed_dev1_3[1],feed_dev1_3[2],feed_dev1_3[3],feed_dev1_3[4]]
+        }]
+        });
+
+        dev_hum.setOption({ 
+        title: {
+        text: 'Humidity'
+        },
+        tooltip: {},
+        legend: {
+            data:['%RH']
+        },
+        xAxis: {
+            data: [time_dev1[0],time_dev1[1],time_dev1[2],time_dev1[3],time_dev1[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: '%RH',
+            type: 'line',
+            data: [feed_dev1_4[0],feed_dev1_4[1],feed_dev1_4[2],feed_dev1_4[3],feed_dev1_4[4]]
+        }]
+        });
+        document.getElementById("timedevice").innerHTML=date+"-Device1";
+        
+
+        setInterval(function(){
+
+        $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
+
+            function addData(shift){
+            date=data.feeds[99].created_at.substring(0,10);
+            time_dev1.push((data.feeds[99].created_at).substring(11,19));
+           
+            feed_dev1_1.push(data.feeds[99].field1);
+            feed_dev1_2.push(data.feeds[99].field2);
+            feed_dev1_3.push(data.feeds[99].field3);
+            feed_dev1_4.push(data.feeds[99].field4);
+            
+            if(shift){
+                time_dev1.shift();
+                for(var i=1;i<=4;i++){
+                    feed_dev1_+i.shift();
+                } 
+            }
+            }
+
+        if(time_dev1[4]!=((data.feeds[99].created_at).substring(11,19))){
+                addData(true);
+        }
+
+        dev_pm2.setOption({
+        xAxis: {
+            data: [time_dev1[0],time_dev1[1],time_dev1[2],time_dev1[3],time_dev1[4]]
+        },
+        series: [{
+            data: [feed_dev1_1[0],feed_dev1_1[1],feed_dev1_1[2],feed_dev1_1[3],feed_dev1_1[4]]
+        }]
+        });
+
+        dev_pm10.setOption({
+        xAxis: {
+            data: [time_dev1[0],time_dev1[1],time_dev1[2],time_dev1[3],time_dev1[4]]
+        },
+        series: [{
+            data: [feed_dev1_2[0],feed_dev1_2[1],feed_dev1_2[2],feed_dev1_2[3],feed_dev1_2[4]]
+        }]
+        });
+
+        dev_temp.setOption({
+        xAxis: {
+            data: [time_dev1[0],time_dev1[1],time_dev1[2],time_dev1[3],time_dev1[4]]
+        },
+        series: [{
+            data: [feed_dev1_3[0],feed_dev1_3[1],feed_dev1_3[2],feed_dev1_3[3],feed_dev1_3[4]]
+        }]
+        });
+
+        dev_hum.setOption({
+        xAxis: {
+            data: [time_dev1[0],time_dev1[1],time_dev1[2],time_dev1[3],time_dev1[4]]
+        },
+        series: [{
+            data: [feed_dev1_4[0],feed_dev1_4[1],feed_dev1_4[2],feed_dev1_4[3],feed_dev1_4[4]]
+        }]
+        });
+        document.getElementById("timedevice").innerHTML=date+"-Device1";
+        
+        }); 
+        },1000)
+    });
+}
+
+function device2(){
+    dev_pm2.showLoading();
+    $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
+        dev_pm2.hideLoading();
+        var date=data.feeds[99].created_at.substring(0,10);
+        var time_dev2=[];
+        var feed_dev2_1=[];//dev2_1=device1 pm2.5,dev2_2=device1 pm10,dev2_3 device1 tempurate dev2_4 device1 humidity...
+        var feed_dev2_2=[];
+        var feed_dev2_3=[];
+        var feed_dev2_4=[];
+
+
+   
+        for(var i=95;i<=99;i++){
+            time_dev2.push((data.feeds[i].created_at).substring(11,19));
+            feed_dev2_1.push(data.feeds[i].field1);
+            feed_dev2_2.push(data.feeds[i].field2);
+            feed_dev2_3.push(data.feeds[i].field3);
+            feed_dev2_4.push(data.feeds[i].field4);
+        }
+
+        dev_pm2.setOption({ 
+        title: {
+        text: 'PM2.5'
+        },
+        tooltip: {},
+        legend: {
+            data:['ug/m3']
+        },
+        xAxis: {
+            data: [time_dev2[0],time_dev2[1],time_dev2[2],time_dev2[3],time_dev2[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: 'ug/m3',
+            type: 'line',
+            data: [feed_dev2_1[0],feed_dev2_1[1],feed_dev2_1[2],feed_dev2_1[3],feed_dev2_1[4]]
+        }]
+        });
+
+        dev_pm10.setOption({ 
+        title: {
+        text: 'PM10'
+        },
+        tooltip: {},
+        legend: {
+            data:['ug/m3']
+        },
+        xAxis: {
+            data: [time_dev2[0],time_dev2[1],time_dev2[2],time_dev2[3],time_dev2[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: 'ug/m3',
+            type: 'line',
+            data: [feed_dev2_2[0],feed_dev2_2[1],feed_dev2_2[2],feed_dev2_2[3],feed_dev2_2[4]]
+        }]
+        });
+
+        dev_temp.setOption({ 
+        title: {
+        text: 'Temperature'
+        },
+        tooltip: {},
+        legend: {
+            data:['°C']
+        },
+        xAxis: {
+            data: [time_dev2[0],time_dev2[1],time_dev2[2],time_dev2[3],time_dev2[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: '°C',
+            type: 'line',
+            data: [feed_dev2_3[0],feed_dev2_3[1],feed_dev2_3[2],feed_dev2_3[3],feed_dev2_3[4]]
+        }]
+        });
+
+        dev_hum.setOption({ 
+        title: {
+        text: 'Humidity'
+        },
+        tooltip: {},
+        legend: {
+            data:['%RH']
+        },
+        xAxis: {
+            data: [time_dev2[0],time_dev2[1],time_dev2[2],time_dev2[3],time_dev2[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: '%RH',
+            type: 'line',
+            data: [feed_dev2_4[0],feed_dev2_4[1],feed_dev2_4[2],feed_dev2_4[3],feed_dev2_4[4]]
+        }]
+        });
+        document.getElementById("timedevice").innerHTML=date+"-Device1";
+        
+
+        setInterval(function(){
+
+        $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
+
+            function addData(shift){
+            date=data.feeds[99].created_at.substring(0,10);
+            time_dev2.push((data.feeds[99].created_at).substring(11,19));
+           
+            feed_dev2_1.push(data.feeds[99].field1);
+            feed_dev2_2.push(data.feeds[99].field2);
+            feed_dev2_3.push(data.feeds[99].field3);
+            feed_dev2_4.push(data.feeds[99].field4);
+            
+            if(shift){
+                time_dev2.shift();
+                for(var i=1;i<=4;i++){
+                    feed_dev2_+i.shift();
+                } 
+            }
+            }
+
+        if(time_dev2[4]!=((data.feeds[99].created_at).substring(11,19))){
+                addData(true);
+        }
+
+        dev_pm2.setOption({
+        xAxis: {
+            data: [time_dev2[0],time_dev2[1],time_dev2[2],time_dev2[3],time_dev2[4]]
+        },
+        series: [{
+            data: [feed_dev2_1[0],feed_dev2_1[1],feed_dev2_1[2],feed_dev2_1[3],feed_dev2_1[4]]
+        }]
+        });
+
+        dev_pm10.setOption({
+        xAxis: {
+            data: [time_dev2[0],time_dev2[1],time_dev2[2],time_dev2[3],time_dev2[4]]
+        },
+        series: [{
+            data: [feed_dev2_2[0],feed_dev2_2[1],feed_dev2_2[2],feed_dev2_2[3],feed_dev2_2[4]]
+        }]
+        });
+
+        dev_temp.setOption({
+        xAxis: {
+            data: [time_dev2[0],time_dev2[1],time_dev2[2],time_dev2[3],time_dev2[4]]
+        },
+        series: [{
+            data: [feed_dev2_3[0],feed_dev2_3[1],feed_dev2_3[2],feed_dev2_3[3],feed_dev2_3[4]]
+        }]
+        });
+
+        dev_hum.setOption({
+        xAxis: {
+            data: [time_dev2[0],time_dev2[1],time_dev2[2],time_dev2[3],time_dev2[4]]
+        },
+        series: [{
+            data: [feed_dev2_4[0],feed_dev2_4[1],feed_dev2_4[2],feed_dev2_4[3],feed_dev2_4[4]]
+        }]
+        });
+        document.getElementById("timedevice").innerHTML=date+"-Device1";
+        
+        }); 
+        },1000)
+    });
+}
+
+function device3(){
+    dev_pm2.showLoading();
+    $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
+        dev_pm2.hideLoading();
+        var date=data.feeds[99].created_at.substring(0,10);
+        var time_dev3=[];
+        var feed_dev3_1=[];//dev3_1=device1 pm2.5,dev3_2=device1 pm10,dev3_3 device1 tempurate dev3_4 device1 humidity...
+        var feed_dev3_2=[];
+        var feed_dev3_3=[];
+        var feed_dev3_4=[];
+
+
+   
+        for(var i=95;i<=99;i++){
+            time_dev3.push((data.feeds[i].created_at).substring(11,19));
+            feed_dev3_1.push(data.feeds[i].field1);
+            feed_dev3_2.push(data.feeds[i].field2);
+            feed_dev3_3.push(data.feeds[i].field3);
+            feed_dev3_4.push(data.feeds[i].field4);
+        }
+
+        dev_pm2.setOption({ 
+        title: {
+        text: 'PM2.5'
+        },
+        tooltip: {},
+        legend: {
+            data:['ug/m3']
+        },
+        xAxis: {
+            data: [time_dev3[0],time_dev3[1],time_dev3[2],time_dev3[3],time_dev3[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: 'ug/m3',
+            type: 'line',
+            data: [feed_dev3_1[0],feed_dev3_1[1],feed_dev3_1[2],feed_dev3_1[3],feed_dev3_1[4]]
+        }]
+        });
+
+        dev_pm10.setOption({ 
+        title: {
+        text: 'PM10'
+        },
+        tooltip: {},
+        legend: {
+            data:['ug/m3']
+        },
+        xAxis: {
+            data: [time_dev3[0],time_dev3[1],time_dev3[2],time_dev3[3],time_dev3[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: 'ug/m3',
+            type: 'line',
+            data: [feed_dev3_2[0],feed_dev3_2[1],feed_dev3_2[2],feed_dev3_2[3],feed_dev3_2[4]]
+        }]
+        });
+
+        dev_temp.setOption({ 
+        title: {
+        text: 'Temperature'
+        },
+        tooltip: {},
+        legend: {
+            data:['°C']
+        },
+        xAxis: {
+            data: [time_dev3[0],time_dev3[1],time_dev3[2],time_dev3[3],time_dev3[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: '°C',
+            type: 'line',
+            data: [feed_dev3_3[0],feed_dev3_3[1],feed_dev3_3[2],feed_dev3_3[3],feed_dev3_3[4]]
+        }]
+        });
+
+        dev_hum.setOption({ 
+        title: {
+        text: 'Humidity'
+        },
+        tooltip: {},
+        legend: {
+            data:['%RH']
+        },
+        xAxis: {
+            data: [time_dev3[0],time_dev3[1],time_dev3[2],time_dev3[3],time_dev3[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: '%RH',
+            type: 'line',
+            data: [feed_dev3_4[0],feed_dev3_4[1],feed_dev3_4[2],feed_dev3_4[3],feed_dev3_4[4]]
+        }]
+        });
+        document.getElementById("timedevice").innerHTML=date+"-Device1";
+        
+
+        setInterval(function(){
+
+        $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
+
+            function addData(shift){
+            date=data.feeds[99].created_at.substring(0,10);
+            time_dev3.push((data.feeds[99].created_at).substring(11,19));
+           
+            feed_dev3_1.push(data.feeds[99].field1);
+            feed_dev3_2.push(data.feeds[99].field2);
+            feed_dev3_3.push(data.feeds[99].field3);
+            feed_dev3_4.push(data.feeds[99].field4);
+            
+            if(shift){
+                time_dev3.shift();
+                for(var i=1;i<=4;i++){
+                    feed_dev3_+i.shift();
+                } 
+            }
+            }
+
+        if(time_dev3[4]!=((data.feeds[99].created_at).substring(11,19))){
+                addData(true);
+        }
+
+        dev_pm2.setOption({
+        xAxis: {
+            data: [time_dev3[0],time_dev3[1],time_dev3[2],time_dev3[3],time_dev3[4]]
+        },
+        series: [{
+            data: [feed_dev3_1[0],feed_dev3_1[1],feed_dev3_1[2],feed_dev3_1[3],feed_dev3_1[4]]
+        }]
+        });
+
+        dev_pm10.setOption({
+        xAxis: {
+            data: [time_dev3[0],time_dev3[1],time_dev3[2],time_dev3[3],time_dev3[4]]
+        },
+        series: [{
+            data: [feed_dev3_2[0],feed_dev3_2[1],feed_dev3_2[2],feed_dev3_2[3],feed_dev3_2[4]]
+        }]
+        });
+
+        dev_temp.setOption({
+        xAxis: {
+            data: [time_dev3[0],time_dev3[1],time_dev3[2],time_dev3[3],time_dev3[4]]
+        },
+        series: [{
+            data: [feed_dev3_3[0],feed_dev3_3[1],feed_dev3_3[2],feed_dev3_3[3],feed_dev3_3[4]]
+        }]
+        });
+
+        dev_hum.setOption({
+        xAxis: {
+            data: [time_dev3[0],time_dev3[1],time_dev3[2],time_dev3[3],time_dev3[4]]
+        },
+        series: [{
+            data: [feed_dev3_4[0],feed_dev3_4[1],feed_dev3_4[2],feed_dev3_4[3],feed_dev3_4[4]]
+        }]
+        });
+        document.getElementById("timedevice").innerHTML=date+"-Device1";
+        
+        }); 
+        },1000)
+    });
+}
+
+function device4(){
+    dev_pm2.showLoading();
+    $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
+        dev_pm2.hideLoading();
+        var date=data.feeds[99].created_at.substring(0,10);
+        var time_dev4=[];
+        var feed_dev4_1=[];//dev4_1=device1 pm2.5,dev4_2=device1 pm10,dev4_3 device1 tempurate dev4_4 device1 humidity...
+        var feed_dev4_2=[];
+        var feed_dev4_3=[];
+        var feed_dev4_4=[];
+
+
+   
+        for(var i=95;i<=99;i++){
+            time_dev4.push((data.feeds[i].created_at).substring(11,19));
+            feed_dev4_1.push(data.feeds[i].field1);
+            feed_dev4_2.push(data.feeds[i].field2);
+            feed_dev4_3.push(data.feeds[i].field3);
+            feed_dev4_4.push(data.feeds[i].field4);
+        }
+
+        dev_pm2.setOption({ 
+        title: {
+        text: 'PM2.5'
+        },
+        tooltip: {},
+        legend: {
+            data:['ug/m3']
+        },
+        xAxis: {
+            data: [time_dev4[0],time_dev4[1],time_dev4[2],time_dev4[3],time_dev4[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: 'ug/m3',
+            type: 'line',
+            data: [feed_dev4_1[0],feed_dev4_1[1],feed_dev4_1[2],feed_dev4_1[3],feed_dev4_1[4]]
+        }]
+        });
+
+        dev_pm10.setOption({ 
+        title: {
+        text: 'PM10'
+        },
+        tooltip: {},
+        legend: {
+            data:['ug/m3']
+        },
+        xAxis: {
+            data: [time_dev4[0],time_dev4[1],time_dev4[2],time_dev4[3],time_dev4[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: 'ug/m3',
+            type: 'line',
+            data: [feed_dev4_2[0],feed_dev4_2[1],feed_dev4_2[2],feed_dev4_2[3],feed_dev4_2[4]]
+        }]
+        });
+
+        dev_temp.setOption({ 
+        title: {
+        text: 'Temperature'
+        },
+        tooltip: {},
+        legend: {
+            data:['°C']
+        },
+        xAxis: {
+            data: [time_dev4[0],time_dev4[1],time_dev4[2],time_dev4[3],time_dev4[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: '°C',
+            type: 'line',
+            data: [feed_dev4_3[0],feed_dev4_3[1],feed_dev4_3[2],feed_dev4_3[3],feed_dev4_3[4]]
+        }]
+        });
+
+        dev_hum.setOption({ 
+        title: {
+        text: 'Humidity'
+        },
+        tooltip: {},
+        legend: {
+            data:['%RH']
+        },
+        xAxis: {
+            data: [time_dev4[0],time_dev4[1],time_dev4[2],time_dev4[3],time_dev4[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: '%RH',
+            type: 'line',
+            data: [feed_dev4_4[0],feed_dev4_4[1],feed_dev4_4[2],feed_dev4_4[3],feed_dev4_4[4]]
+        }]
+        });
+        document.getElementById("timedevice").innerHTML=date+"-Device1";
+        
+
+        setInterval(function(){
+
+        $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
+
+            function addData(shift){
+            date=data.feeds[99].created_at.substring(0,10);
+            time_dev4.push((data.feeds[99].created_at).substring(11,19));
+           
+            feed_dev4_1.push(data.feeds[99].field1);
+            feed_dev4_2.push(data.feeds[99].field2);
+            feed_dev4_3.push(data.feeds[99].field3);
+            feed_dev4_4.push(data.feeds[99].field4);
+            
+            if(shift){
+                time_dev4.shift();
+                for(var i=1;i<=4;i++){
+                    feed_dev4_+i.shift();
+                } 
+            }
+            }
+
+        if(time_dev4[4]!=((data.feeds[99].created_at).substring(11,19))){
+                addData(true);
+        }
+
+        dev_pm2.setOption({
+        xAxis: {
+            data: [time_dev4[0],time_dev4[1],time_dev4[2],time_dev4[3],time_dev4[4]]
+        },
+        series: [{
+            data: [feed_dev4_1[0],feed_dev4_1[1],feed_dev4_1[2],feed_dev4_1[3],feed_dev4_1[4]]
+        }]
+        });
+
+        dev_pm10.setOption({
+        xAxis: {
+            data: [time_dev4[0],time_dev4[1],time_dev4[2],time_dev4[3],time_dev4[4]]
+        },
+        series: [{
+            data: [feed_dev4_2[0],feed_dev4_2[1],feed_dev4_2[2],feed_dev4_2[3],feed_dev4_2[4]]
+        }]
+        });
+
+        dev_temp.setOption({
+        xAxis: {
+            data: [time_dev4[0],time_dev4[1],time_dev4[2],time_dev4[3],time_dev4[4]]
+        },
+        series: [{
+            data: [feed_dev4_3[0],feed_dev4_3[1],feed_dev4_3[2],feed_dev4_3[3],feed_dev4_3[4]]
+        }]
+        });
+
+        dev_hum.setOption({
+        xAxis: {
+            data: [time_dev4[0],time_dev4[1],time_dev4[2],time_dev4[3],time_dev4[4]]
+        },
+        series: [{
+            data: [feed_dev4_4[0],feed_dev4_4[1],feed_dev4_4[2],feed_dev4_4[3],feed_dev4_4[4]]
+        }]
+        });
+        document.getElementById("timedevice").innerHTML=date+"-Device1";
+        
+        }); 
+        },1000)
+    });
+}
+
+function device5(){
+    dev_pm2.showLoading();
+    $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
+        dev_pm2.hideLoading();
+        var date=data.feeds[99].created_at.substring(0,10);
+        var time_dev5=[];
+        var feed_dev5_1=[];//dev5_1=device1 pm2.5,dev5_2=device1 pm10,dev5_3 device1 tempurate dev5_4 device1 humidity...
+        var feed_dev5_2=[];
+        var feed_dev5_3=[];
+        var feed_dev5_4=[];
+
+
+   
+        for(var i=95;i<=99;i++){
+            time_dev5.push((data.feeds[i].created_at).substring(11,19));
+            feed_dev5_1.push(data.feeds[i].field1);
+            feed_dev5_2.push(data.feeds[i].field2);
+            feed_dev5_3.push(data.feeds[i].field3);
+            feed_dev5_4.push(data.feeds[i].field4);
+        }
+
+        dev_pm2.setOption({ 
+        title: {
+        text: 'PM2.5'
+        },
+        tooltip: {},
+        legend: {
+            data:['ug/m3']
+        },
+        xAxis: {
+            data: [time_dev5[0],time_dev5[1],time_dev5[2],time_dev5[3],time_dev5[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: 'ug/m3',
+            type: 'line',
+            data: [feed_dev5_1[0],feed_dev5_1[1],feed_dev5_1[2],feed_dev5_1[3],feed_dev5_1[4]]
+        }]
+        });
+
+        dev_pm10.setOption({ 
+        title: {
+        text: 'PM10'
+        },
+        tooltip: {},
+        legend: {
+            data:['ug/m3']
+        },
+        xAxis: {
+            data: [time_dev5[0],time_dev5[1],time_dev5[2],time_dev5[3],time_dev5[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: 'ug/m3',
+            type: 'line',
+            data: [feed_dev5_2[0],feed_dev5_2[1],feed_dev5_2[2],feed_dev5_2[3],feed_dev5_2[4]]
+        }]
+        });
+
+        dev_temp.setOption({ 
+        title: {
+        text: 'Temperature'
+        },
+        tooltip: {},
+        legend: {
+            data:['°C']
+        },
+        xAxis: {
+            data: [time_dev5[0],time_dev5[1],time_dev5[2],time_dev5[3],time_dev5[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: '°C',
+            type: 'line',
+            data: [feed_dev5_3[0],feed_dev5_3[1],feed_dev5_3[2],feed_dev5_3[3],feed_dev5_3[4]]
+        }]
+        });
+
+        dev_hum.setOption({ 
+        title: {
+        text: 'Humidity'
+        },
+        tooltip: {},
+        legend: {
+            data:['%RH']
+        },
+        xAxis: {
+            data: [time_dev5[0],time_dev5[1],time_dev5[2],time_dev5[3],time_dev5[4]]
+        },
+        yAxis: {},
+        series: [{
+            name: '%RH',
+            type: 'line',
+            data: [feed_dev5_4[0],feed_dev5_4[1],feed_dev5_4[2],feed_dev5_4[3],feed_dev5_4[4]]
+        }]
+        });
+        document.getElementById("timedevice").innerHTML=date+"-Device1";
+        
+
+        setInterval(function(){
+
+        $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
+
+            function addData(shift){
+            date=data.feeds[99].created_at.substring(0,10);
+            time_dev5.push((data.feeds[99].created_at).substring(11,19));
+           
+            feed_dev5_1.push(data.feeds[99].field1);
+            feed_dev5_2.push(data.feeds[99].field2);
+            feed_dev5_3.push(data.feeds[99].field3);
+            feed_dev5_4.push(data.feeds[99].field4);
+            
+            if(shift){
+                time_dev5.shift();
+                for(var i=1;i<=4;i++){
+                    feed_dev5_+i.shift();
+                } 
+            }
+            }
+
+        if(time_dev5[4]!=((data.feeds[99].created_at).substring(11,19))){
+                addData(true);
+        }
+
+        dev_pm2.setOption({
+        xAxis: {
+            data: [time_dev5[0],time_dev5[1],time_dev5[2],time_dev5[3],time_dev5[4]]
+        },
+        series: [{
+            data: [feed_dev5_1[0],feed_dev5_1[1],feed_dev5_1[2],feed_dev5_1[3],feed_dev5_1[4]]
+        }]
+        });
+
+        dev_pm10.setOption({
+        xAxis: {
+            data: [time_dev5[0],time_dev5[1],time_dev5[2],time_dev5[3],time_dev5[4]]
+        },
+        series: [{
+            data: [feed_dev5_2[0],feed_dev5_2[1],feed_dev5_2[2],feed_dev5_2[3],feed_dev5_2[4]]
+        }]
+        });
+
+        dev_temp.setOption({
+        xAxis: {
+            data: [time_dev5[0],time_dev5[1],time_dev5[2],time_dev5[3],time_dev5[4]]
+        },
+        series: [{
+            data: [feed_dev5_3[0],feed_dev5_3[1],feed_dev5_3[2],feed_dev5_3[3],feed_dev5_3[4]]
+        }]
+        });
+
+        dev_hum.setOption({
+        xAxis: {
+            data: [time_dev5[0],time_dev5[1],time_dev5[2],time_dev5[3],time_dev5[4]]
+        },
+        series: [{
+            data: [feed_dev5_4[0],feed_dev5_4[1],feed_dev5_4[2],feed_dev5_4[3],feed_dev5_4[4]]
+        }]
+        });
+        document.getElementById("timedevice").innerHTML=date+"-Device1";
+        
+        }); 
+        },1000)
+    });
+}
     </script>
 </body>
 </html>
