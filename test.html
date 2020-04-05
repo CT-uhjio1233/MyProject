@@ -16,11 +16,11 @@
         }
         #header{
             color: white;
-            padding-top: 50px;
+            padding-left:0px;
             font-size: 42px;
-            background-color: green;
-            width: 1440px;
-            height: 120px;
+            background-color: rgb(38, 124, 38);
+            width: 1490px;
+            height: 125px;
         }
         #wrap{
             float: left;
@@ -31,24 +31,46 @@
             width: 1200px;
             height: 850px;
         }
-        #side{
-            float: left;
-            margin-left: -100%;
-            width: 240px;
-            height: 850;
-        }
-        #timedevice{
+        #device{
+            margin-left: 35px;
             text-align: center;
             font-size: 30px;
             width: 300px;
             height: 40px;
             color: white;
-            background-color: green;
+            background-color: rgb(38, 124, 38);
+        }
+        #side{
+            float: left;
+            margin-left: -100%;
+            width: 240px;
+            height: 850px;
+        }
+        #littleside{
+          width: 180px;
+          height: 230px;
+          margin: 30px ;
+          border: 3px greenyellow solid;
+        }
+        #littletitle{
+            width: 180px;
+            height: 30px;
+            background-color: greenyellow;
+            font-size: 20px;
+            color: white;
+            text-align: center;
+        }
+        #warninglevel{
+            font-family: "微軟正黑體";
+        }
+        #lastupdata{
+            font-family: "微軟正黑體";
+            font-size: 16px;
         }
         #float{
             background-color: greenyellow;
             clear: both;
-            width: 1440x;
+            width: 1490px;
             height: 80px;
         }
         #dev_pm2{
@@ -80,15 +102,31 @@
             height: 350px;
             border: 5px green solid;
         }
+        .oncligr{
+            text-align: center;
+            font-size: 24px;
+            color: white;
+            margin: 5px;
+            background-color: green;
+        }
+        .oncligrh{
+            text-align: center;
+            font-size: 24px;
+            color: white;
+            margin: 5px;
+            background-color: greenyellow;
+        }
     </style>
 </head>
 
 <body>
    <div id="set">
-       <div id="header">校園環境建置計畫</div>
+       <div id="header">
+           <img src="img/title.png">
+       </div>
        <div id="wrap">
            <div id="main">
-           <p id="timedevice"></p>
+           <p id="device"></p>
            <div id="dev_pm2"></div>
            <div id="dev_pm10"></div>
            <div id="dev_temp"></div>
@@ -96,34 +134,46 @@
            </div>
        </div> 
        <div id="side">
-           <div id="devicechange"></div>
-           <div id="lastupdata"></div>
-           <div id="jsompackage"></div>
+           <div id="littleside">
+               <div id="littletitle">切換裝置</div>
+               <h3 id="device1" onclick="device1()" class="oncligr">Device1</h3>
+               <h3 id="device2" onclick="device2()" class="oncligrh">Device2</h3>
+               <h3 id="device3" onclick="device3()" class="oncligr">Device3</h3>
+               <h3 id="device4" onclick="device4()" class="oncligrh">Device4</h3>
+               <h3 id="device5" onclick="device5()" class="oncligr">Device5</h3>
+               <div id="devicechange"></div>
+            </div>
+            <div id="littleside">
+               <div id="littletitle">空汙等級</div>
+               <div id="warninglevel"></div>
+            </div>
+            <div id="littleside">
+               <div id="littletitle">更新日期</div>
+               <div id="lastupdata"></div>
+            </div>
        </div>
        <div id="float"></div>
    </div>
 
     <script type="text/javascript">
     window.onload=device1;
-
+   function device1(){
     var dev_pm2=echarts.init(document.getElementById('dev_pm2'));
     var dev_pm10=echarts.init(document.getElementById('dev_pm10'));
     var dev_temp=echarts.init(document.getElementById('dev_temp'));
     var dev_hum=echarts.init(document.getElementById('dev_hum'));
 
-   function device1(){
-    dev_pm2.showLoading();
+    dev_pm2.showLoading();dev_pm10.showLoading();dev_temp.showLoading();dev_hum.showLoading();
     $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
-        dev_pm2.hideLoading();
-        var date=data.feeds[99].created_at.substring(0,10);
+        dev_pm2.hideLoading();dev_pm10.hideLoading();dev_temp.hideLoading();dev_hum.hideLoading();
+        var date=[];
         var time_dev1=[];
         var feed_dev1_1=[];//dev1_1=device1 pm2.5,dev1_2=device1 pm10,dev1_3 device1 tempurate dev1_4 device1 humidity...
         var feed_dev1_2=[];
         var feed_dev1_3=[];
         var feed_dev1_4=[];
 
-
-   
+        date[0]=data.feeds[99].created_at.substring(0,10)+"-"+data.feeds[99].created_at.substring(11,19);
         for(var i=95;i<=99;i++){
             time_dev1.push((data.feeds[i].created_at).substring(11,19));
             feed_dev1_1.push(data.feeds[i].field1);
@@ -207,81 +257,23 @@
             data: [feed_dev1_4[0],feed_dev1_4[1],feed_dev1_4[2],feed_dev1_4[3],feed_dev1_4[4]]
         }]
         });
-        document.getElementById("timedevice").innerHTML=date+"-Device1";
-        
-
-        setInterval(function(){
-
-        $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
-
-            function addData(shift){
-            date=data.feeds[99].created_at.substring(0,10);
-            time_dev1.push((data.feeds[99].created_at).substring(11,19));
-           
-            feed_dev1_1.push(data.feeds[99].field1);
-            feed_dev1_2.push(data.feeds[99].field2);
-            feed_dev1_3.push(data.feeds[99].field3);
-            feed_dev1_4.push(data.feeds[99].field4);
-            
-            if(shift){
-                time_dev1.shift();
-                for(var i=1;i<=4;i++){
-                    feed_dev1_+i.shift();
-                } 
-            }
-            }
-
-        if(time_dev1[4]!=((data.feeds[99].created_at).substring(11,19))){
-                addData(true);
-        }
-
-        dev_pm2.setOption({
-        xAxis: {
-            data: [time_dev1[0],time_dev1[1],time_dev1[2],time_dev1[3],time_dev1[4]]
-        },
-        series: [{
-            data: [feed_dev1_1[0],feed_dev1_1[1],feed_dev1_1[2],feed_dev1_1[3],feed_dev1_1[4]]
-        }]
-        });
-
-        dev_pm10.setOption({
-        xAxis: {
-            data: [time_dev1[0],time_dev1[1],time_dev1[2],time_dev1[3],time_dev1[4]]
-        },
-        series: [{
-            data: [feed_dev1_2[0],feed_dev1_2[1],feed_dev1_2[2],feed_dev1_2[3],feed_dev1_2[4]]
-        }]
-        });
-
-        dev_temp.setOption({
-        xAxis: {
-            data: [time_dev1[0],time_dev1[1],time_dev1[2],time_dev1[3],time_dev1[4]]
-        },
-        series: [{
-            data: [feed_dev1_3[0],feed_dev1_3[1],feed_dev1_3[2],feed_dev1_3[3],feed_dev1_3[4]]
-        }]
-        });
-
-        dev_hum.setOption({
-        xAxis: {
-            data: [time_dev1[0],time_dev1[1],time_dev1[2],time_dev1[3],time_dev1[4]]
-        },
-        series: [{
-            data: [feed_dev1_4[0],feed_dev1_4[1],feed_dev1_4[2],feed_dev1_4[3],feed_dev1_4[4]]
-        }]
-        });
-        document.getElementById("timedevice").innerHTML=date+"-Device1";
-        
-        }); 
-        },1000)
+        document.getElementById("device").innerHTML="Device1";
+        document.getElementById("lastupdata").innerHTML=date;
+        warninglevel(feed_dev1_1[4]);
+        updata("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8","Device1");
     });
 }
 
 function device2(){
-    dev_pm2.showLoading();
+    var dev_pm2=echarts.init(document.getElementById('dev_pm2'));
+    var dev_pm10=echarts.init(document.getElementById('dev_pm10'));
+    var dev_temp=echarts.init(document.getElementById('dev_temp'));
+    var dev_hum=echarts.init(document.getElementById('dev_hum'));
+
+    dev_pm2.showLoading();dev_pm10.showLoading();dev_temp.showLoading();dev_hum.showLoading();
     $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
-        dev_pm2.hideLoading();
-        var date=data.feeds[99].created_at.substring(0,10);
+        dev_pm2.hideLoading();dev_pm10.hideLoading();dev_temp.hideLoading();dev_hum.hideLoading();
+        var date=[];
         var time_dev2=[];
         var feed_dev2_1=[];//dev2_1=device1 pm2.5,dev2_2=device1 pm10,dev2_3 device1 tempurate dev2_4 device1 humidity...
         var feed_dev2_2=[];
@@ -289,7 +281,7 @@ function device2(){
         var feed_dev2_4=[];
 
 
-   
+        date[0]=data.feeds[99].created_at.substring(0,10)+"-"+data.feeds[99].created_at.substring(11,19);
         for(var i=95;i<=99;i++){
             time_dev2.push((data.feeds[i].created_at).substring(11,19));
             feed_dev2_1.push(data.feeds[i].field1);
@@ -373,81 +365,22 @@ function device2(){
             data: [feed_dev2_4[0],feed_dev2_4[1],feed_dev2_4[2],feed_dev2_4[3],feed_dev2_4[4]]
         }]
         });
-        document.getElementById("timedevice").innerHTML=date+"-Device1";
-        
-
-        setInterval(function(){
-
-        $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
-
-            function addData(shift){
-            date=data.feeds[99].created_at.substring(0,10);
-            time_dev2.push((data.feeds[99].created_at).substring(11,19));
-           
-            feed_dev2_1.push(data.feeds[99].field1);
-            feed_dev2_2.push(data.feeds[99].field2);
-            feed_dev2_3.push(data.feeds[99].field3);
-            feed_dev2_4.push(data.feeds[99].field4);
-            
-            if(shift){
-                time_dev2.shift();
-                for(var i=1;i<=4;i++){
-                    feed_dev2_+i.shift();
-                } 
-            }
-            }
-
-        if(time_dev2[4]!=((data.feeds[99].created_at).substring(11,19))){
-                addData(true);
-        }
-
-        dev_pm2.setOption({
-        xAxis: {
-            data: [time_dev2[0],time_dev2[1],time_dev2[2],time_dev2[3],time_dev2[4]]
-        },
-        series: [{
-            data: [feed_dev2_1[0],feed_dev2_1[1],feed_dev2_1[2],feed_dev2_1[3],feed_dev2_1[4]]
-        }]
-        });
-
-        dev_pm10.setOption({
-        xAxis: {
-            data: [time_dev2[0],time_dev2[1],time_dev2[2],time_dev2[3],time_dev2[4]]
-        },
-        series: [{
-            data: [feed_dev2_2[0],feed_dev2_2[1],feed_dev2_2[2],feed_dev2_2[3],feed_dev2_2[4]]
-        }]
-        });
-
-        dev_temp.setOption({
-        xAxis: {
-            data: [time_dev2[0],time_dev2[1],time_dev2[2],time_dev2[3],time_dev2[4]]
-        },
-        series: [{
-            data: [feed_dev2_3[0],feed_dev2_3[1],feed_dev2_3[2],feed_dev2_3[3],feed_dev2_3[4]]
-        }]
-        });
-
-        dev_hum.setOption({
-        xAxis: {
-            data: [time_dev2[0],time_dev2[1],time_dev2[2],time_dev2[3],time_dev2[4]]
-        },
-        series: [{
-            data: [feed_dev2_4[0],feed_dev2_4[1],feed_dev2_4[2],feed_dev2_4[3],feed_dev2_4[4]]
-        }]
-        });
-        document.getElementById("timedevice").innerHTML=date+"-Device1";
-        
-        }); 
-        },1000)
+        document.getElementById("device").innerHTML="Device2";
+        document.getElementById("lastupdata").innerHTML=date;
+        updata("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8","Device2");
     });
 }
 
 function device3(){
-    dev_pm2.showLoading();
+    var dev_pm2=echarts.init(document.getElementById('dev_pm2'));
+    var dev_pm10=echarts.init(document.getElementById('dev_pm10'));
+    var dev_temp=echarts.init(document.getElementById('dev_temp'));
+    var dev_hum=echarts.init(document.getElementById('dev_hum'));
+
+    dev_pm2.showLoading();dev_pm10.showLoading();dev_temp.showLoading();dev_hum.showLoading();
     $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
-        dev_pm2.hideLoading();
-        var date=data.feeds[99].created_at.substring(0,10);
+        dev_pm2.hideLoading();dev_pm10.hideLoading();dev_temp.hideLoading();dev_hum.hideLoading();
+        var date=[];
         var time_dev3=[];
         var feed_dev3_1=[];//dev3_1=device1 pm2.5,dev3_2=device1 pm10,dev3_3 device1 tempurate dev3_4 device1 humidity...
         var feed_dev3_2=[];
@@ -455,7 +388,7 @@ function device3(){
         var feed_dev3_4=[];
 
 
-   
+        date[0]=data.feeds[99].created_at.substring(0,10)+"-"+data.feeds[99].created_at.substring(11,19);
         for(var i=95;i<=99;i++){
             time_dev3.push((data.feeds[i].created_at).substring(11,19));
             feed_dev3_1.push(data.feeds[i].field1);
@@ -539,81 +472,22 @@ function device3(){
             data: [feed_dev3_4[0],feed_dev3_4[1],feed_dev3_4[2],feed_dev3_4[3],feed_dev3_4[4]]
         }]
         });
-        document.getElementById("timedevice").innerHTML=date+"-Device1";
-        
-
-        setInterval(function(){
-
-        $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
-
-            function addData(shift){
-            date=data.feeds[99].created_at.substring(0,10);
-            time_dev3.push((data.feeds[99].created_at).substring(11,19));
-           
-            feed_dev3_1.push(data.feeds[99].field1);
-            feed_dev3_2.push(data.feeds[99].field2);
-            feed_dev3_3.push(data.feeds[99].field3);
-            feed_dev3_4.push(data.feeds[99].field4);
-            
-            if(shift){
-                time_dev3.shift();
-                for(var i=1;i<=4;i++){
-                    feed_dev3_+i.shift();
-                } 
-            }
-            }
-
-        if(time_dev3[4]!=((data.feeds[99].created_at).substring(11,19))){
-                addData(true);
-        }
-
-        dev_pm2.setOption({
-        xAxis: {
-            data: [time_dev3[0],time_dev3[1],time_dev3[2],time_dev3[3],time_dev3[4]]
-        },
-        series: [{
-            data: [feed_dev3_1[0],feed_dev3_1[1],feed_dev3_1[2],feed_dev3_1[3],feed_dev3_1[4]]
-        }]
-        });
-
-        dev_pm10.setOption({
-        xAxis: {
-            data: [time_dev3[0],time_dev3[1],time_dev3[2],time_dev3[3],time_dev3[4]]
-        },
-        series: [{
-            data: [feed_dev3_2[0],feed_dev3_2[1],feed_dev3_2[2],feed_dev3_2[3],feed_dev3_2[4]]
-        }]
-        });
-
-        dev_temp.setOption({
-        xAxis: {
-            data: [time_dev3[0],time_dev3[1],time_dev3[2],time_dev3[3],time_dev3[4]]
-        },
-        series: [{
-            data: [feed_dev3_3[0],feed_dev3_3[1],feed_dev3_3[2],feed_dev3_3[3],feed_dev3_3[4]]
-        }]
-        });
-
-        dev_hum.setOption({
-        xAxis: {
-            data: [time_dev3[0],time_dev3[1],time_dev3[2],time_dev3[3],time_dev3[4]]
-        },
-        series: [{
-            data: [feed_dev3_4[0],feed_dev3_4[1],feed_dev3_4[2],feed_dev3_4[3],feed_dev3_4[4]]
-        }]
-        });
-        document.getElementById("timedevice").innerHTML=date+"-Device1";
-        
-        }); 
-        },1000)
+        document.getElementById("device").innerHTML="Device3";
+        document.getElementById("lastupdata").innerHTML=date;
+        updata("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8","Device3");
     });
 }
 
 function device4(){
-    dev_pm2.showLoading();
+    var dev_pm2=echarts.init(document.getElementById('dev_pm2'));
+    var dev_pm10=echarts.init(document.getElementById('dev_pm10'));
+    var dev_temp=echarts.init(document.getElementById('dev_temp'));
+    var dev_hum=echarts.init(document.getElementById('dev_hum'));
+
+    dev_pm2.showLoading();dev_pm10.showLoading();dev_temp.showLoading();dev_hum.showLoading();
     $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
-        dev_pm2.hideLoading();
-        var date=data.feeds[99].created_at.substring(0,10);
+        dev_pm2.hideLoading();dev_pm10.hideLoading();dev_temp.hideLoading();dev_hum.hideLoading();
+        var date=[];
         var time_dev4=[];
         var feed_dev4_1=[];//dev4_1=device1 pm2.5,dev4_2=device1 pm10,dev4_3 device1 tempurate dev4_4 device1 humidity...
         var feed_dev4_2=[];
@@ -621,7 +495,7 @@ function device4(){
         var feed_dev4_4=[];
 
 
-   
+        date[0]=data.feeds[99].created_at.substring(0,10)+"-"+data.feeds[99].created_at.substring(11,19);
         for(var i=95;i<=99;i++){
             time_dev4.push((data.feeds[i].created_at).substring(11,19));
             feed_dev4_1.push(data.feeds[i].field1);
@@ -705,81 +579,22 @@ function device4(){
             data: [feed_dev4_4[0],feed_dev4_4[1],feed_dev4_4[2],feed_dev4_4[3],feed_dev4_4[4]]
         }]
         });
-        document.getElementById("timedevice").innerHTML=date+"-Device1";
-        
-
-        setInterval(function(){
-
-        $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
-
-            function addData(shift){
-            date=data.feeds[99].created_at.substring(0,10);
-            time_dev4.push((data.feeds[99].created_at).substring(11,19));
-           
-            feed_dev4_1.push(data.feeds[99].field1);
-            feed_dev4_2.push(data.feeds[99].field2);
-            feed_dev4_3.push(data.feeds[99].field3);
-            feed_dev4_4.push(data.feeds[99].field4);
-            
-            if(shift){
-                time_dev4.shift();
-                for(var i=1;i<=4;i++){
-                    feed_dev4_+i.shift();
-                } 
-            }
-            }
-
-        if(time_dev4[4]!=((data.feeds[99].created_at).substring(11,19))){
-                addData(true);
-        }
-
-        dev_pm2.setOption({
-        xAxis: {
-            data: [time_dev4[0],time_dev4[1],time_dev4[2],time_dev4[3],time_dev4[4]]
-        },
-        series: [{
-            data: [feed_dev4_1[0],feed_dev4_1[1],feed_dev4_1[2],feed_dev4_1[3],feed_dev4_1[4]]
-        }]
-        });
-
-        dev_pm10.setOption({
-        xAxis: {
-            data: [time_dev4[0],time_dev4[1],time_dev4[2],time_dev4[3],time_dev4[4]]
-        },
-        series: [{
-            data: [feed_dev4_2[0],feed_dev4_2[1],feed_dev4_2[2],feed_dev4_2[3],feed_dev4_2[4]]
-        }]
-        });
-
-        dev_temp.setOption({
-        xAxis: {
-            data: [time_dev4[0],time_dev4[1],time_dev4[2],time_dev4[3],time_dev4[4]]
-        },
-        series: [{
-            data: [feed_dev4_3[0],feed_dev4_3[1],feed_dev4_3[2],feed_dev4_3[3],feed_dev4_3[4]]
-        }]
-        });
-
-        dev_hum.setOption({
-        xAxis: {
-            data: [time_dev4[0],time_dev4[1],time_dev4[2],time_dev4[3],time_dev4[4]]
-        },
-        series: [{
-            data: [feed_dev4_4[0],feed_dev4_4[1],feed_dev4_4[2],feed_dev4_4[3],feed_dev4_4[4]]
-        }]
-        });
-        document.getElementById("timedevice").innerHTML=date+"-Device1";
-        
-        }); 
-        },1000)
+        document.getElementById("device").innerHTML="Device4";
+        document.getElementById("lastupdata").innerHTML=date;
+        updata("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8","Device4");
     });
 }
 
 function device5(){
-    dev_pm2.showLoading();
+    var dev_pm2=echarts.init(document.getElementById('dev_pm2'));
+    var dev_pm10=echarts.init(document.getElementById('dev_pm10'));
+    var dev_temp=echarts.init(document.getElementById('dev_temp'));
+    var dev_hum=echarts.init(document.getElementById('dev_hum'));
+
+    dev_pm2.showLoading();dev_pm10.showLoading();dev_temp.showLoading();dev_hum.showLoading();
     $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
-        dev_pm2.hideLoading();
-        var date=data.feeds[99].created_at.substring(0,10);
+        dev_pm2.hideLoading();dev_pm10.hideLoading();dev_temp.hideLoading();dev_hum.hideLoading();
+        var date=[];
         var time_dev5=[];
         var feed_dev5_1=[];//dev5_1=device1 pm2.5,dev5_2=device1 pm10,dev5_3 device1 tempurate dev5_4 device1 humidity...
         var feed_dev5_2=[];
@@ -787,7 +602,7 @@ function device5(){
         var feed_dev5_4=[];
 
 
-   
+        date[0]=data.feeds[99].created_at.substring(0,10)+"-"+data.feeds[99].created_at.substring(11,19);
         for(var i=95;i<=99;i++){
             time_dev5.push((data.feeds[i].created_at).substring(11,19));
             feed_dev5_1.push(data.feeds[i].field1);
@@ -871,75 +686,147 @@ function device5(){
             data: [feed_dev5_4[0],feed_dev5_4[1],feed_dev5_4[2],feed_dev5_4[3],feed_dev5_4[4]]
         }]
         });
-        document.getElementById("timedevice").innerHTML=date+"-Device1";
-        
+        document.getElementById("device").innerHTML="Device5";
+        document.getElementById("lastupdata").innerHTML=date;
+        updata("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8","Device5");
+    });
+}
+   function warninglevel(pm){
+       var level=0;
+       if(pm>0&&pm<=11){
+           level=1;
+       }
+       else if(pm>11&&pm<=23){
+           level=2;
+       }
+       else if(pm>23&&pm<=35){
+           level=3;
+       }
+       else if(pm>35&&pm<=41){
+           level=4;
+       }
+       else if(pm>41&&pm<=47){
+           level=5;
+       }
+       else if(pm>47&&pm<=53){
+           level=6;
+       }
+       else if(pm>53&&pm<=58){
+           level=7;
+       }
+       else if(pm>58&&pm<=64){
+           level=8;
+       }
+       else if(pm>64&&pm<=70){
+           level=9;
+       }
+       else if(pm>70){
+           level=10;
+       }
+       switch(level){
+               case 1:
+               document.getElementById("warninglevel").innerHTML="指標等級:1<br>分類:低<br>PM2.5:0-11(μg/m3)<br>一般民眾活動建議:正常戶外活動。";
+               break;
+               case 2:
+               document.getElementById("warninglevel").innerHTML="指標等級:2<br>分類:低<br>PM2.5:12-23(μg/m3)<br>一般民眾活動建議:正常戶外活動。";
+               break;
+               case 3:
+               document.getElementById("warninglevel").innerHTML="指標等級:3<br>分類:低<br>PM2.5:24-3(μg/m3)5<br>一般民眾活動建議:正常戶外活動。";
+               break;
+               case 4:
+               document.getElementById("warninglevel").innerHTML="指標等級:4<br>分類:中<br>PM2.5:36-41(μg/m3)<br>一般民眾活動建議:正常戶外活動。";
+               break;
+               case 5:
+               document.getElementById("warninglevel").innerHTML="指標等級:5<br>分類:中<br>PM2.5:42-47(μg/m3)<br>一般民眾活動建議:正常戶外活動。";
+               break;
+               case 6:
+               document.getElementById("warninglevel").innerHTML="指標等級:6<br>分類:中<br>PM2.5:48-53(μg/m3)<br>一般民眾活動建議:正常戶外活動。";
+               break;
+               case 7:
+               document.getElementById("warninglevel").innerHTML="指標等級:7<br>分類:高<br>PM2.5:54-58(μg/m3)<br>一般民眾活動建議:任何人如果有不適，如眼痛，咳嗽或喉嚨痛等，應該考慮減少戶外活動。";
+               break;
+               case 8:
+               document.getElementById("warninglevel").innerHTML="指標等級:8<br>分類:高<br>PM2.5:59-64(μg/m3)<br>一般民眾活動建議:任何人如果有不適，如眼痛，咳嗽或喉嚨痛等，應該考慮減少戶外活動。";
+               break;
+               case 9:
+               document.getElementById("warninglevel").innerHTML="指標等級:9<br>分類:高<br>PM2.5:65-70(μg/m3)<br>一般民眾活動建議:任何人如果有不適，如眼痛，咳嗽或喉嚨痛等，應該考慮減少戶外活動。";
+               break;
+               case 10:
+               document.getElementById("warninglevel").innerHTML="指標等級:10<br>分類:非常高<br>PM2.5:>=71(μg/m3)<br>一般民眾活動建議:任何人如果有不適，如眼痛，咳嗽或喉嚨痛等，應 減少體力消耗，特別是減少戶外活動。";
+               break;    
+       }
+
+   }
+   function updata(com ,devnum){
 
         setInterval(function(){
 
-        $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
+        $.get(com).done(function(data){
 
             function addData(shift){
-            date=data.feeds[99].created_at.substring(0,10);
+            date.push(data.feeds[99].created_at.substring(0,10)+"-"+data.feeds[99].created_at.substring(11,19));
             time_dev5.push((data.feeds[99].created_at).substring(11,19));
            
-            feed_dev5_1.push(data.feeds[99].field1);
-            feed_dev5_2.push(data.feeds[99].field2);
-            feed_dev5_3.push(data.feeds[99].field3);
-            feed_dev5_4.push(data.feeds[99].field4);
-            
+            feed_dev_1.push(data.feeds[99].field1);
+            feed_dev_2.push(data.feeds[99].field2);
+            feed_dev_3.push(data.feeds[99].field3);
+            feed_dev_4.push(data.feeds[99].field4);
+            if(date.length>10){
+                date.shift();
+            }
             if(shift){
-                time_dev5.shift();
+                time_dev.shift();
                 for(var i=1;i<=4;i++){
-                    feed_dev5_+i.shift();
+                    feed_dev_+i.shift();
                 } 
             }
             }
 
-        if(time_dev5[4]!=((data.feeds[99].created_at).substring(11,19))){
+        if(time_dev[4]!=((data.feeds[99].created_at).substring(11,19))){
                 addData(true);
         }
 
         dev_pm2.setOption({
         xAxis: {
-            data: [time_dev5[0],time_dev5[1],time_dev5[2],time_dev5[3],time_dev5[4]]
+            data: [time_dev[0],time_dev[1],time_dev[2],time_dev[3],time_dev[4]]
         },
         series: [{
-            data: [feed_dev5_1[0],feed_dev5_1[1],feed_dev5_1[2],feed_dev5_1[3],feed_dev5_1[4]]
+            data: [feed_dev_1[0],feed_dev_1[1],feed_dev_1[2],feed_dev_1[3],feed_dev_1[4]]
         }]
         });
 
         dev_pm10.setOption({
         xAxis: {
-            data: [time_dev5[0],time_dev5[1],time_dev5[2],time_dev5[3],time_dev5[4]]
+            data: [time_dev[0],time_dev[1],time_dev[2],time_dev[3],time_dev[4]]
         },
         series: [{
-            data: [feed_dev5_2[0],feed_dev5_2[1],feed_dev5_2[2],feed_dev5_2[3],feed_dev5_2[4]]
+            data: [feed_dev_2[0],feed_dev_2[1],feed_dev_2[2],feed_dev_2[3],feed_dev_2[4]]
         }]
         });
 
         dev_temp.setOption({
         xAxis: {
-            data: [time_dev5[0],time_dev5[1],time_dev5[2],time_dev5[3],time_dev5[4]]
+            data: [time_dev[0],time_dev[1],time_dev[2],time_dev[3],time_dev[4]]
         },
         series: [{
-            data: [feed_dev5_3[0],feed_dev5_3[1],feed_dev5_3[2],feed_dev5_3[3],feed_dev5_3[4]]
+            data: [feed_dev_3[0],feed_dev_3[1],feed_dev_3[2],feed_dev_3[3],feed_dev_3[4]]
         }]
         });
 
         dev_hum.setOption({
         xAxis: {
-            data: [time_dev5[0],time_dev5[1],time_dev5[2],time_dev5[3],time_dev5[4]]
+            data: [time_dev[0],time_dev[1],time_dev[2],time_dev[3],time_dev[4]]
         },
         series: [{
-            data: [feed_dev5_4[0],feed_dev5_4[1],feed_dev5_4[2],feed_dev5_4[3],feed_dev5_4[4]]
+            data: [feed_dev_4[0],feed_dev_4[1],feed_dev_4[2],feed_dev_4[3],feed_dev_4[4]]
         }]
         });
-        document.getElementById("timedevice").innerHTML=date+"-Device1";
-        
+        document.getElementById("device").innerHTML=devnum;
+        document.getElementById("lastupdata").innerHTML=date;
+        warninglevel(feed_dev1_1[4]);
         }); 
-        },1000)
-    });
-}
+        },1000);
+   }
     </script>
 </body>
 </html>
