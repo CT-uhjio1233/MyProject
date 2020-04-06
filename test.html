@@ -12,11 +12,11 @@
             font-size: 20px;
         }
         #set{
-
+            width: 1490px;
+            height: 1055px;
         }
         #header{
             color: white;
-            padding-left:0px;
             font-size: 42px;
             background-color: rgb(38, 124, 38);
             width: 1490px;
@@ -157,23 +157,26 @@
 
     <script type="text/javascript">
     window.onload=device1;
-   function device1(){
+    var date=[];
+
+    function device1(){
     var dev_pm2=echarts.init(document.getElementById('dev_pm2'));
     var dev_pm10=echarts.init(document.getElementById('dev_pm10'));
     var dev_temp=echarts.init(document.getElementById('dev_temp'));
     var dev_hum=echarts.init(document.getElementById('dev_hum'));
-
+    
     dev_pm2.showLoading();dev_pm10.showLoading();dev_temp.showLoading();dev_hum.showLoading();
     $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
         dev_pm2.hideLoading();dev_pm10.hideLoading();dev_temp.hideLoading();dev_hum.hideLoading();
-        var date=[];
+       
         var time_dev1=[];
         var feed_dev1_1=[];//dev1_1=device1 pm2.5,dev1_2=device1 pm10,dev1_3 device1 tempurate dev1_4 device1 humidity...
         var feed_dev1_2=[];
         var feed_dev1_3=[];
         var feed_dev1_4=[];
 
-        date[0]=data.feeds[99].created_at.substring(0,10)+"-"+data.feeds[99].created_at.substring(11,19);
+        
+
         for(var i=95;i<=99;i++){
             time_dev1.push((data.feeds[i].created_at).substring(11,19));
             feed_dev1_1.push(data.feeds[i].field1);
@@ -258,7 +261,7 @@
         }]
         });
         document.getElementById("device").innerHTML="Device1";
-        document.getElementById("lastupdata").innerHTML=date;
+        
         warninglevel(feed_dev1_1[4]);
         updata("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8","Device1");
     });
@@ -273,7 +276,7 @@ function device2(){
     dev_pm2.showLoading();dev_pm10.showLoading();dev_temp.showLoading();dev_hum.showLoading();
     $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
         dev_pm2.hideLoading();dev_pm10.hideLoading();dev_temp.hideLoading();dev_hum.hideLoading();
-        var date=[];
+       
         var time_dev2=[];
         var feed_dev2_1=[];//dev2_1=device1 pm2.5,dev2_2=device1 pm10,dev2_3 device1 tempurate dev2_4 device1 humidity...
         var feed_dev2_2=[];
@@ -366,7 +369,7 @@ function device2(){
         }]
         });
         document.getElementById("device").innerHTML="Device2";
-        document.getElementById("lastupdata").innerHTML=date;
+        
         updata("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8","Device2");
     });
 }
@@ -380,7 +383,7 @@ function device3(){
     dev_pm2.showLoading();dev_pm10.showLoading();dev_temp.showLoading();dev_hum.showLoading();
     $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
         dev_pm2.hideLoading();dev_pm10.hideLoading();dev_temp.hideLoading();dev_hum.hideLoading();
-        var date=[];
+       
         var time_dev3=[];
         var feed_dev3_1=[];//dev3_1=device1 pm2.5,dev3_2=device1 pm10,dev3_3 device1 tempurate dev3_4 device1 humidity...
         var feed_dev3_2=[];
@@ -473,7 +476,7 @@ function device3(){
         }]
         });
         document.getElementById("device").innerHTML="Device3";
-        document.getElementById("lastupdata").innerHTML=date;
+        
         updata("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8","Device3");
     });
 }
@@ -487,7 +490,7 @@ function device4(){
     dev_pm2.showLoading();dev_pm10.showLoading();dev_temp.showLoading();dev_hum.showLoading();
     $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
         dev_pm2.hideLoading();dev_pm10.hideLoading();dev_temp.hideLoading();dev_hum.hideLoading();
-        var date=[];
+       
         var time_dev4=[];
         var feed_dev4_1=[];//dev4_1=device1 pm2.5,dev4_2=device1 pm10,dev4_3 device1 tempurate dev4_4 device1 humidity...
         var feed_dev4_2=[];
@@ -580,7 +583,7 @@ function device4(){
         }]
         });
         document.getElementById("device").innerHTML="Device4";
-        document.getElementById("lastupdata").innerHTML=date;
+        
         updata("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8","Device4");
     });
 }
@@ -594,7 +597,7 @@ function device5(){
     dev_pm2.showLoading();dev_pm10.showLoading();dev_temp.showLoading();dev_hum.showLoading();
     $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
         dev_pm2.hideLoading();dev_pm10.hideLoading();dev_temp.hideLoading();dev_hum.hideLoading();
-        var date=[];
+       
         var time_dev5=[];
         var feed_dev5_1=[];//dev5_1=device1 pm2.5,dev5_2=device1 pm10,dev5_3 device1 tempurate dev5_4 device1 humidity...
         var feed_dev5_2=[];
@@ -687,7 +690,7 @@ function device5(){
         }]
         });
         document.getElementById("device").innerHTML="Device5";
-        document.getElementById("lastupdata").innerHTML=date;
+        
         updata("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8","Device5");
     });
 }
@@ -757,6 +760,7 @@ function device5(){
        }
 
    }
+
    function updata(com ,devnum){
 
         setInterval(function(){
@@ -822,7 +826,7 @@ function device5(){
         }]
         });
         document.getElementById("device").innerHTML=devnum;
-        document.getElementById("lastupdata").innerHTML=date;
+        document.getElementById("lastupdata").innerHTML=date+"-"+devnum;
         warninglevel(feed_dev1_1[4]);
         }); 
         },1000);
