@@ -67,12 +67,6 @@
             font-family: "微軟正黑體";
             font-size: 16px;
         }
-        #float{
-            background-color: greenyellow;
-            clear: both;
-            width: 1490px;
-            height: 80px;
-        }
         #dev_pm2{
             margin: 25px 0 0 35px;
             float: left;
@@ -135,12 +129,8 @@
        </div> 
        <div id="side">
            <div id="littleside">
-               <div id="littletitle">切換裝置</div>
-               <h3 id="device1" onclick="device1()" class="oncligr">Device1</h3>
-               <h3 id="device2" onclick="device2()" class="oncligrh">Device2</h3>
-               <h3 id="device3" onclick="device3()" class="oncligr">Device3</h3>
-               <h3 id="device4" onclick="device4()" class="oncligrh">Device4</h3>
-               <h3 id="device5" onclick="device5()" class="oncligr">Device5</h3>
+               <div id="littletitle">各數據與指標對照表</div>
+               
                <div id="devicechange"></div>
             </div>
             <div id="littleside">
@@ -152,38 +142,67 @@
                <div id="lastupdata"></div>
             </div>
        </div>
-       <div id="float"></div>
    </div>
 
     <script type="text/javascript">
-    window.onload=device1;
-    var date=[];
 
-    function device1(){
+    window.onload=device1;
+
     var dev_pm2=echarts.init(document.getElementById('dev_pm2'));
     var dev_pm10=echarts.init(document.getElementById('dev_pm10'));
     var dev_temp=echarts.init(document.getElementById('dev_temp'));
     var dev_hum=echarts.init(document.getElementById('dev_hum'));
-    
     dev_pm2.showLoading();dev_pm10.showLoading();dev_temp.showLoading();dev_hum.showLoading();
-    $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
+
+    var feed_dev1_0=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",1);
+    var feed_dev1_1=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",2);
+    var feed_dev1_2=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",3);
+    var feed_dev1_3=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",4);
+
+    var feed_dev2_0=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",1);
+    var feed_dev2_1=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",2);
+    var feed_dev2_2=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",3);
+    var feed_dev2_3=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",4);
+
+    var feed_dev3_0=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",1);
+    var feed_dev3_1=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",2);
+    var feed_dev3_2=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",3);
+    var feed_dev3_3=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",4);
+
+    var feed_dev4_0=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",1);
+    var feed_dev4_1=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",2);
+    var feed_dev4_2=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",3);
+    var feed_dev4_3=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",4);
+
+    var feed_dev5_0=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",1);
+    var feed_dev5_1=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",2);
+    var feed_dev5_2=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",3);
+    var feed_dev5_3=get_data("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8",4);
+        
+    var time_dev0=get_time("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8");
+    var time_dev1=get_time("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8");
+    var time_dev2=get_time("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8");
+    var time_dev3=get_time("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8");
+    var time_dev4=get_time("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8");
+    
+    var date=[];
+
+
+    function device1(){
         dev_pm2.hideLoading();dev_pm10.hideLoading();dev_temp.hideLoading();dev_hum.hideLoading();
        
-        var time_dev1=[];
-        var feed_dev1_1=[];//dev1_1=device1 pm2.5,dev1_2=device1 pm10,dev1_3 device1 tempurate dev1_4 device1 humidity...
-        var feed_dev1_2=[];
-        var feed_dev1_3=[];
-        var feed_dev1_4=[];
+        var data0=[];
+        var data1=[];
+        var data2=[];
+        var data3=[];
+        var time_dev=[];
+
+        for(var i=0;i<=4;i++){
+            datai[i]=(feed_dev1_i[i]+feed_dev2_i[i]+feed_dev3_i[i]+feed_dev4_i[i]+feed_dev5_i[i])/4;
+            time_dev[i]=(time_dev0[i]+time_dev1[i]+time_dev2[i]+time_dev3[i]+time_dev4[i])/4;
+        }
 
         
-
-        for(var i=95;i<=99;i++){
-            time_dev1.push((data.feeds[i].created_at).substring(11,19));
-            feed_dev1_1.push(data.feeds[i].field1);
-            feed_dev1_2.push(data.feeds[i].field2);
-            feed_dev1_3.push(data.feeds[i].field3);
-            feed_dev1_4.push(data.feeds[i].field4);
-        }
 
         dev_pm2.setOption({ 
         title: {
@@ -194,13 +213,13 @@
             data:['ug/m3']
         },
         xAxis: {
-            data: [time_dev1[0],time_dev1[1],time_dev1[2],time_dev1[3],time_dev1[4]]
+            data: [time_dev[0],time_dev[1],time_dev[2],time_dev[3],time_dev[4]]
         },
         yAxis: {},
         series: [{
             name: 'ug/m3',
             type: 'line',
-            data: [feed_dev1_1[0],feed_dev1_1[1],feed_dev1_1[2],feed_dev1_1[3],feed_dev1_1[4]]
+            data: [data0[0],data0[1],data0[2],data0[3],data0[4]]
         }]
         });
 
@@ -219,7 +238,7 @@
         series: [{
             name: 'ug/m3',
             type: 'line',
-            data: [feed_dev1_2[0],feed_dev1_2[1],feed_dev1_2[2],feed_dev1_2[3],feed_dev1_2[4]]
+            data: [data1[0],data1[1],data1[2],data1[3],data1[4]]
         }]
         });
 
@@ -238,7 +257,7 @@
         series: [{
             name: '°C',
             type: 'line',
-            data: [feed_dev1_3[0],feed_dev1_3[1],feed_dev1_3[2],feed_dev1_3[3],feed_dev1_3[4]]
+            data: [data2[0],data2[1],data2[2],data2[3],data2[4]]
         }]
         });
 
@@ -251,449 +270,40 @@
             data:['%RH']
         },
         xAxis: {
-            data: [time_dev1[0],time_dev1[1],time_dev1[2],time_dev1[3],time_dev1[4]]
+            data: [time_dev[0],time_dev1[1],time_dev1[2],time_dev1[3],time_dev1[4]]
         },
         yAxis: {},
         series: [{
             name: '%RH',
             type: 'line',
-            data: [feed_dev1_4[0],feed_dev1_4[1],feed_dev1_4[2],feed_dev1_4[3],feed_dev1_4[4]]
+            data: [data3[0],data3[1],data3[2],data3[3],data3[4]]
         }]
         });
         document.getElementById("device").innerHTML="Device1";
-        
-        warninglevel(feed_dev1_1[4]);
+        warninglevel(data[4]);
         updata("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8","Device1");
-    });
 }
 
-function device2(){
-    var dev_pm2=echarts.init(document.getElementById('dev_pm2'));
-    var dev_pm10=echarts.init(document.getElementById('dev_pm10'));
-    var dev_temp=echarts.init(document.getElementById('dev_temp'));
-    var dev_hum=echarts.init(document.getElementById('dev_hum'));
-
-    dev_pm2.showLoading();dev_pm10.showLoading();dev_temp.showLoading();dev_hum.showLoading();
-    $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
-        dev_pm2.hideLoading();dev_pm10.hideLoading();dev_temp.hideLoading();dev_hum.hideLoading();
-       
-        var time_dev2=[];
-        var feed_dev2_1=[];//dev2_1=device1 pm2.5,dev2_2=device1 pm10,dev2_3 device1 tempurate dev2_4 device1 humidity...
-        var feed_dev2_2=[];
-        var feed_dev2_3=[];
-        var feed_dev2_4=[];
-
-
-        date[0]=data.feeds[99].created_at.substring(0,10)+"-"+data.feeds[99].created_at.substring(11,19);
+function get_time(document){
+    time_dev=[];
+    get(document).done(function(data){
         for(var i=95;i<=99;i++){
-            time_dev2.push((data.feeds[i].created_at).substring(11,19));
-            feed_dev2_1.push(data.feeds[i].field1);
-            feed_dev2_2.push(data.feeds[i].field2);
-            feed_dev2_3.push(data.feeds[i].field3);
-            feed_dev2_4.push(data.feeds[i].field4);
+            time_dev.push((data.feeds[i].created_at).substring(11,19));
         }
-
-        dev_pm2.setOption({ 
-        title: {
-        text: 'PM2.5'
-        },
-        tooltip: {},
-        legend: {
-            data:['ug/m3']
-        },
-        xAxis: {
-            data: [time_dev2[0],time_dev2[1],time_dev2[2],time_dev2[3],time_dev2[4]]
-        },
-        yAxis: {},
-        series: [{
-            name: 'ug/m3',
-            type: 'line',
-            data: [feed_dev2_1[0],feed_dev2_1[1],feed_dev2_1[2],feed_dev2_1[3],feed_dev2_1[4]]
-        }]
-        });
-
-        dev_pm10.setOption({ 
-        title: {
-        text: 'PM10'
-        },
-        tooltip: {},
-        legend: {
-            data:['ug/m3']
-        },
-        xAxis: {
-            data: [time_dev2[0],time_dev2[1],time_dev2[2],time_dev2[3],time_dev2[4]]
-        },
-        yAxis: {},
-        series: [{
-            name: 'ug/m3',
-            type: 'line',
-            data: [feed_dev2_2[0],feed_dev2_2[1],feed_dev2_2[2],feed_dev2_2[3],feed_dev2_2[4]]
-        }]
-        });
-
-        dev_temp.setOption({ 
-        title: {
-        text: 'Temperature'
-        },
-        tooltip: {},
-        legend: {
-            data:['°C']
-        },
-        xAxis: {
-            data: [time_dev2[0],time_dev2[1],time_dev2[2],time_dev2[3],time_dev2[4]]
-        },
-        yAxis: {},
-        series: [{
-            name: '°C',
-            type: 'line',
-            data: [feed_dev2_3[0],feed_dev2_3[1],feed_dev2_3[2],feed_dev2_3[3],feed_dev2_3[4]]
-        }]
-        });
-
-        dev_hum.setOption({ 
-        title: {
-        text: 'Humidity'
-        },
-        tooltip: {},
-        legend: {
-            data:['%RH']
-        },
-        xAxis: {
-            data: [time_dev2[0],time_dev2[1],time_dev2[2],time_dev2[3],time_dev2[4]]
-        },
-        yAxis: {},
-        series: [{
-            name: '%RH',
-            type: 'line',
-            data: [feed_dev2_4[0],feed_dev2_4[1],feed_dev2_4[2],feed_dev2_4[3],feed_dev2_4[4]]
-        }]
-        });
-        document.getElementById("device").innerHTML="Device2";
-        
-        updata("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8","Device2");
     });
+    return time_dev;
 }
 
-function device3(){
-    var dev_pm2=echarts.init(document.getElementById('dev_pm2'));
-    var dev_pm10=echarts.init(document.getElementById('dev_pm10'));
-    var dev_temp=echarts.init(document.getElementById('dev_temp'));
-    var dev_hum=echarts.init(document.getElementById('dev_hum'));
-
-    dev_pm2.showLoading();dev_pm10.showLoading();dev_temp.showLoading();dev_hum.showLoading();
-    $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
-        dev_pm2.hideLoading();dev_pm10.hideLoading();dev_temp.hideLoading();dev_hum.hideLoading();
-       
-        var time_dev3=[];
-        var feed_dev3_1=[];//dev3_1=device1 pm2.5,dev3_2=device1 pm10,dev3_3 device1 tempurate dev3_4 device1 humidity...
-        var feed_dev3_2=[];
-        var feed_dev3_3=[];
-        var feed_dev3_4=[];
-
-
-        date[0]=data.feeds[99].created_at.substring(0,10)+"-"+data.feeds[99].created_at.substring(11,19);
+function get_data(document,cou){
+    feed_dev=[];
+    get(document).done(function(data){
         for(var i=95;i<=99;i++){
-            time_dev3.push((data.feeds[i].created_at).substring(11,19));
-            feed_dev3_1.push(data.feeds[i].field1);
-            feed_dev3_2.push(data.feeds[i].field2);
-            feed_dev3_3.push(data.feeds[i].field3);
-            feed_dev3_4.push(data.feeds[i].field4);
+            feed_dev.push(data.feeds[i].field+cou);
         }
-
-        dev_pm2.setOption({ 
-        title: {
-        text: 'PM2.5'
-        },
-        tooltip: {},
-        legend: {
-            data:['ug/m3']
-        },
-        xAxis: {
-            data: [time_dev3[0],time_dev3[1],time_dev3[2],time_dev3[3],time_dev3[4]]
-        },
-        yAxis: {},
-        series: [{
-            name: 'ug/m3',
-            type: 'line',
-            data: [feed_dev3_1[0],feed_dev3_1[1],feed_dev3_1[2],feed_dev3_1[3],feed_dev3_1[4]]
-        }]
-        });
-
-        dev_pm10.setOption({ 
-        title: {
-        text: 'PM10'
-        },
-        tooltip: {},
-        legend: {
-            data:['ug/m3']
-        },
-        xAxis: {
-            data: [time_dev3[0],time_dev3[1],time_dev3[2],time_dev3[3],time_dev3[4]]
-        },
-        yAxis: {},
-        series: [{
-            name: 'ug/m3',
-            type: 'line',
-            data: [feed_dev3_2[0],feed_dev3_2[1],feed_dev3_2[2],feed_dev3_2[3],feed_dev3_2[4]]
-        }]
-        });
-
-        dev_temp.setOption({ 
-        title: {
-        text: 'Temperature'
-        },
-        tooltip: {},
-        legend: {
-            data:['°C']
-        },
-        xAxis: {
-            data: [time_dev3[0],time_dev3[1],time_dev3[2],time_dev3[3],time_dev3[4]]
-        },
-        yAxis: {},
-        series: [{
-            name: '°C',
-            type: 'line',
-            data: [feed_dev3_3[0],feed_dev3_3[1],feed_dev3_3[2],feed_dev3_3[3],feed_dev3_3[4]]
-        }]
-        });
-
-        dev_hum.setOption({ 
-        title: {
-        text: 'Humidity'
-        },
-        tooltip: {},
-        legend: {
-            data:['%RH']
-        },
-        xAxis: {
-            data: [time_dev3[0],time_dev3[1],time_dev3[2],time_dev3[3],time_dev3[4]]
-        },
-        yAxis: {},
-        series: [{
-            name: '%RH',
-            type: 'line',
-            data: [feed_dev3_4[0],feed_dev3_4[1],feed_dev3_4[2],feed_dev3_4[3],feed_dev3_4[4]]
-        }]
-        });
-        document.getElementById("device").innerHTML="Device3";
-        
-        updata("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8","Device3");
     });
+    return feed_dev;
 }
 
-function device4(){
-    var dev_pm2=echarts.init(document.getElementById('dev_pm2'));
-    var dev_pm10=echarts.init(document.getElementById('dev_pm10'));
-    var dev_temp=echarts.init(document.getElementById('dev_temp'));
-    var dev_hum=echarts.init(document.getElementById('dev_hum'));
-
-    dev_pm2.showLoading();dev_pm10.showLoading();dev_temp.showLoading();dev_hum.showLoading();
-    $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
-        dev_pm2.hideLoading();dev_pm10.hideLoading();dev_temp.hideLoading();dev_hum.hideLoading();
-       
-        var time_dev4=[];
-        var feed_dev4_1=[];//dev4_1=device1 pm2.5,dev4_2=device1 pm10,dev4_3 device1 tempurate dev4_4 device1 humidity...
-        var feed_dev4_2=[];
-        var feed_dev4_3=[];
-        var feed_dev4_4=[];
-
-
-        date[0]=data.feeds[99].created_at.substring(0,10)+"-"+data.feeds[99].created_at.substring(11,19);
-        for(var i=95;i<=99;i++){
-            time_dev4.push((data.feeds[i].created_at).substring(11,19));
-            feed_dev4_1.push(data.feeds[i].field1);
-            feed_dev4_2.push(data.feeds[i].field2);
-            feed_dev4_3.push(data.feeds[i].field3);
-            feed_dev4_4.push(data.feeds[i].field4);
-        }
-
-        dev_pm2.setOption({ 
-        title: {
-        text: 'PM2.5'
-        },
-        tooltip: {},
-        legend: {
-            data:['ug/m3']
-        },
-        xAxis: {
-            data: [time_dev4[0],time_dev4[1],time_dev4[2],time_dev4[3],time_dev4[4]]
-        },
-        yAxis: {},
-        series: [{
-            name: 'ug/m3',
-            type: 'line',
-            data: [feed_dev4_1[0],feed_dev4_1[1],feed_dev4_1[2],feed_dev4_1[3],feed_dev4_1[4]]
-        }]
-        });
-
-        dev_pm10.setOption({ 
-        title: {
-        text: 'PM10'
-        },
-        tooltip: {},
-        legend: {
-            data:['ug/m3']
-        },
-        xAxis: {
-            data: [time_dev4[0],time_dev4[1],time_dev4[2],time_dev4[3],time_dev4[4]]
-        },
-        yAxis: {},
-        series: [{
-            name: 'ug/m3',
-            type: 'line',
-            data: [feed_dev4_2[0],feed_dev4_2[1],feed_dev4_2[2],feed_dev4_2[3],feed_dev4_2[4]]
-        }]
-        });
-
-        dev_temp.setOption({ 
-        title: {
-        text: 'Temperature'
-        },
-        tooltip: {},
-        legend: {
-            data:['°C']
-        },
-        xAxis: {
-            data: [time_dev4[0],time_dev4[1],time_dev4[2],time_dev4[3],time_dev4[4]]
-        },
-        yAxis: {},
-        series: [{
-            name: '°C',
-            type: 'line',
-            data: [feed_dev4_3[0],feed_dev4_3[1],feed_dev4_3[2],feed_dev4_3[3],feed_dev4_3[4]]
-        }]
-        });
-
-        dev_hum.setOption({ 
-        title: {
-        text: 'Humidity'
-        },
-        tooltip: {},
-        legend: {
-            data:['%RH']
-        },
-        xAxis: {
-            data: [time_dev4[0],time_dev4[1],time_dev4[2],time_dev4[3],time_dev4[4]]
-        },
-        yAxis: {},
-        series: [{
-            name: '%RH',
-            type: 'line',
-            data: [feed_dev4_4[0],feed_dev4_4[1],feed_dev4_4[2],feed_dev4_4[3],feed_dev4_4[4]]
-        }]
-        });
-        document.getElementById("device").innerHTML="Device4";
-        
-        updata("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8","Device4");
-    });
-}
-
-function device5(){
-    var dev_pm2=echarts.init(document.getElementById('dev_pm2'));
-    var dev_pm10=echarts.init(document.getElementById('dev_pm10'));
-    var dev_temp=echarts.init(document.getElementById('dev_temp'));
-    var dev_hum=echarts.init(document.getElementById('dev_hum'));
-
-    dev_pm2.showLoading();dev_pm10.showLoading();dev_temp.showLoading();dev_hum.showLoading();
-    $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8").done(function(data){
-        dev_pm2.hideLoading();dev_pm10.hideLoading();dev_temp.hideLoading();dev_hum.hideLoading();
-       
-        var time_dev5=[];
-        var feed_dev5_1=[];//dev5_1=device1 pm2.5,dev5_2=device1 pm10,dev5_3 device1 tempurate dev5_4 device1 humidity...
-        var feed_dev5_2=[];
-        var feed_dev5_3=[];
-        var feed_dev5_4=[];
-
-
-        date[0]=data.feeds[99].created_at.substring(0,10)+"-"+data.feeds[99].created_at.substring(11,19);
-        for(var i=95;i<=99;i++){
-            time_dev5.push((data.feeds[i].created_at).substring(11,19));
-            feed_dev5_1.push(data.feeds[i].field1);
-            feed_dev5_2.push(data.feeds[i].field2);
-            feed_dev5_3.push(data.feeds[i].field3);
-            feed_dev5_4.push(data.feeds[i].field4);
-        }
-
-        dev_pm2.setOption({ 
-        title: {
-        text: 'PM2.5'
-        },
-        tooltip: {},
-        legend: {
-            data:['ug/m3']
-        },
-        xAxis: {
-            data: [time_dev5[0],time_dev5[1],time_dev5[2],time_dev5[3],time_dev5[4]]
-        },
-        yAxis: {},
-        series: [{
-            name: 'ug/m3',
-            type: 'line',
-            data: [feed_dev5_1[0],feed_dev5_1[1],feed_dev5_1[2],feed_dev5_1[3],feed_dev5_1[4]]
-        }]
-        });
-
-        dev_pm10.setOption({ 
-        title: {
-        text: 'PM10'
-        },
-        tooltip: {},
-        legend: {
-            data:['ug/m3']
-        },
-        xAxis: {
-            data: [time_dev5[0],time_dev5[1],time_dev5[2],time_dev5[3],time_dev5[4]]
-        },
-        yAxis: {},
-        series: [{
-            name: 'ug/m3',
-            type: 'line',
-            data: [feed_dev5_2[0],feed_dev5_2[1],feed_dev5_2[2],feed_dev5_2[3],feed_dev5_2[4]]
-        }]
-        });
-
-        dev_temp.setOption({ 
-        title: {
-        text: 'Temperature'
-        },
-        tooltip: {},
-        legend: {
-            data:['°C']
-        },
-        xAxis: {
-            data: [time_dev5[0],time_dev5[1],time_dev5[2],time_dev5[3],time_dev5[4]]
-        },
-        yAxis: {},
-        series: [{
-            name: '°C',
-            type: 'line',
-            data: [feed_dev5_3[0],feed_dev5_3[1],feed_dev5_3[2],feed_dev5_3[3],feed_dev5_3[4]]
-        }]
-        });
-
-        dev_hum.setOption({ 
-        title: {
-        text: 'Humidity'
-        },
-        tooltip: {},
-        legend: {
-            data:['%RH']
-        },
-        xAxis: {
-            data: [time_dev5[0],time_dev5[1],time_dev5[2],time_dev5[3],time_dev5[4]]
-        },
-        yAxis: {},
-        series: [{
-            name: '%RH',
-            type: 'line',
-            data: [feed_dev5_4[0],feed_dev5_4[1],feed_dev5_4[2],feed_dev5_4[3],feed_dev5_4[4]]
-        }]
-        });
-        document.getElementById("device").innerHTML="Device5";
-        
-        updata("https://api.thingspeak.com/channels/1008690/feeds.json?key=AIU2U4E7PGCJQ4S8","Device5");
-    });
-}
    function warninglevel(pm){
        var level=0;
        if(pm>0&&pm<=11){
