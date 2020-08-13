@@ -90,6 +90,7 @@
 
     <script type="text/javascript">
 
+
     window.onload=device1;
 
     var dev_pm2=echarts.init(document.getElementById('dev_pm2'));
@@ -191,7 +192,7 @@
 
 function get_time(key){
     time_dev=[];
-    get("https://api.thingspeak.com/channels/1008690/feeds.json?key="+key).done(function(data){
+    $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key="+key).done(function(data){
         for(var i=95;i<=99;i++){
             time_dev.push((data.feeds[i].created_at).substring(11,19));
         }
@@ -206,7 +207,7 @@ function get_data(key1,key2,key3,key4,key5,number){
     data5=[];
     data=[];
     for(var i=1;i<=5;i++){
-        get("https://api.thingspeak.com/channels/1008690/feeds.json?key="+key+i).done(function(data){
+        $.get("https://api.thingspeak.com/channels/1008690/feeds.json?key="+key+i).done(function(data){
         for(var i=95;i<=99;i++){
             data.push(data.feeds[i].field+number);
         }
@@ -287,6 +288,7 @@ function get_data(key1,key2,key3,key4,key5,number){
         }); 
         },1000);
    }
+}
     </script>
 </body>
 </html>
