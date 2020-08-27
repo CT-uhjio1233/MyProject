@@ -126,32 +126,6 @@
                color: white;
                float: left;
            }
-           ul.change_page li{
-             position: relative;
-             float: left;
-             list-style:none;
-             width: 100px;
-             height: 50px;
-           }
-           ul.change_page li a{
-             display: block;
-             padding: 12px 20px;
-             background:rgb(134, 134, 134);
-             color: white;
-             text-decoration:none;
-           }
-           ul.change_page>li>a{
-             border-bottom: 1px solid rgb(192, 192, 192);
-             border-left: 1px solid rgb(192, 192, 192);
-           }
-           ul.change_page>li>a:hover{
-             color: rgb(165, 163, 163);
-             background: rgb(45, 45, 49);
-           }
-           ul.change_page li a:hover{
-             color: rgb(165, 163, 163);
-             background: rgb(45, 45, 49);
-           }
        </style>
    </head>
    <body>
@@ -207,16 +181,15 @@
                <div class="level_activity" style="line-height: 25px;font-size: 14px;text-align: left;">一般:如果有不適者減少戶外活動。</div>
                <div class="level_activity" style="line-height: 24px;font-size: 14px;text-align: left;">敏感:有心臟、呼吸道及心血管疾病的人避免戶外活動。</div>
 
-               <ul class="change_page">
-                 <li><a href="#">change_page</a>
-                 <ul>
-                    <li><a href="#">pm25</a></li>
-                    <li><a href="#">pm10</a></li>
-                    <li><a href="#">溫度</a></li>
-                    <li><a href="#">濕度</a></li>
-                 </ul>
-                 </li>
-               </ul>
+               <select id="Select" size="4">
+                <option>PM2.5</option>
+                <option>PM10</option>
+                <option>溫度</option>
+                <option>濕度</option>
+              </select>
+
+              <button onclick="changePage()" style="width:120px;height:40px;border:2px #050505 solid;">切換其他資料</button>
+
             </div>
 
            <div class="floor" >
@@ -226,6 +199,14 @@
            </div>
 
            <script type="text/javascript">
+           
+           function changePage(){
+               var x=document.getElementById("Select").value;
+               switch(x){
+                   case "PM2.5":
+                   window.location.assign("Echarts.html")
+               }
+           }
               
             var url="http://140.128.87.192/NCUTair/ShowLast";
             
