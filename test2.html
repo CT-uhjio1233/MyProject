@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+   <head>
+       <title>AirQulity</title>
+       <meta charset="utf-8">
+       <script src="js_doc/jquery.min.js"></script>
+   </head>
+   <body>
+        <div id='node' style="width: 100px;height: 100px;color: #000;"></div>      
+         
+        <script type="text/javascript">
+            function getjs(){
+                $.getJSON('http://localhost:3000').done(function(data){
+                console.log(data.add_time);
+                $("#node").append(data.add_time);
+                });
+            }
+            getjs()
+        </script>
+   </body>
+</html>
