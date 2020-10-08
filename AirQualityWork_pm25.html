@@ -236,12 +236,11 @@
                maxWidth : 400
                });
               
-               var osmUrl='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-               var osm = new L.TileLayer(osmUrl, {minZoom: 8, maxZoom: 18});
+               var osm = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {minZoom: 8, maxZoom: 18});
                map.addLayer(osm);
-            });
-        }
-        creat_map(url);
+               });
+            }
+         creat_map(url);
 
            </script>
    </body>
