@@ -3,9 +3,20 @@ jQuery(document).ready(function($) {
     'use strict';
 
 
-        $(".slider").slick({
-            prevArrow:'<button class="PrevArrow"></button>',
-            nextArrow:'<button class="NextArrow"></button>', 
+        $(".Modern-Slider").slick({
+           /* autoplay:true,
+           speed:1000,*/
+            slidesToShow:1,
+            slidesToScroll:1,
+            pauseOnHover:false,
+            dots:true,
+            fade: true,
+            pauseOnDotsHover:true,
+            cssEase:'linear',
+           // fade:true,
+            draggable:false,
+            /*prevArrow:'<button class="PrevArrow"></button>',
+            nextArrow:'<button class="NextArrow"></button>',*/ 
           });
 
         $('#nav-toggle').on('click', function (event) {
