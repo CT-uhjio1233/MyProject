@@ -840,7 +840,10 @@ header {
 #blog .item .text-content .accent-button {
   margin-top: 25px;
 }
-
+#blog .echarts{
+  width: 100%;
+  height: 400px;
+}
 
 
 

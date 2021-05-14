@@ -815,7 +815,6 @@ header {
 #blog .tabgroup ul li .text-content {
   display: inline;
 }
-
 #blog .item .text-content h4 {
   padding-top: 7.5px;
   margin-top: 0px;
@@ -825,7 +824,6 @@ header {
   color: #232323;
   letter-spacing: 0.5px;
 }
-
 #blog .item .text-content span {
   display: inline-block;
   font-size: 15px;
